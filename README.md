@@ -9,8 +9,8 @@
 
 ## 下載與安裝
 
-[![下載 HT-76](https://img.shields.io/badge/DOWNLOAD-HT--76-62B6A5?style=for-the-badge&logo=github&logoColor=E7DFC9&labelColor=252729)](https://github.com/Hikari-Tsai/HT-76/releases)
-[![完整安裝指南](https://img.shields.io/badge/GUIDE-INSTALLATION-D5B779?style=for-the-badge&labelColor=252729)](docs/INSTALLATION.md)
+[![下載 HT-76](https://img.shields.io/badge/DOWNLOAD-HT--76-62B6A5?style=for-the-badge&logo=github&logoColor=E7DFC9&labelColor=252729)](https://github.com/Hikari-Tsai/HT-76/releases) &emsp;&emsp;
+[![完整安裝指南](https://img.shields.io/badge/GUIDE-INSTALLATION-D5B779?style=for-the-badge&labelColor=252729)](docs/INSTALLATION.md) &emsp;&emsp;
 [![問題回報](https://img.shields.io/badge/SUPPORT-ISSUES-9CA5A8?style=for-the-badge&labelColor=252729)](https://github.com/Hikari-Tsai/HT-76/issues)
 
 1. **下載：** 在 Releases 展開 **Assets**，依平台選擇下表的安裝檔。標示 Pre-release 的版本為測試版；Source code 是原始碼。
