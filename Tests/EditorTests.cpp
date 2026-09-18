@@ -4,6 +4,27 @@
 #include <cmath>
 namespace {
 void require(bool ok,const char* message){if(!ok)throw std::runtime_error(message);}
+template <typename Predicate>
+void waitUntil(Predicate ready,const char* message)
+{
+    // CI message-thread timers need not run within a single 40–60 ms window.
+    // Check the actual result, while retaining a bounded failure for broken UI.
+    const auto deadline=juce::Time::getMillisecondCounterHiRes()+2000.0;
+    while(!ready())
+    {
+        require(juce::Time::getMillisecondCounterHiRes()<deadline,message);
+        require(juce::MessageManager::getInstance()->runDispatchLoopUntil(10),"message loop stopped during editor test");
+    }
+}
+
+struct ClickObserver final : juce::Button::Listener
+{
+    explicit ClickObserver(juce::Button& b):button(b){button.addListener(this);}
+    ~ClickObserver() override {button.removeListener(this);}
+    void buttonClicked(juce::Button*) override {delivered=true;}
+    juce::Button& button;
+    bool delivered=false;
+};
 juce::Component* find(juce::Component& c,const std::function<bool(juce::Component&)>& match)
 {
     if(match(c))return &c;
@@ -18,7 +39,11 @@ juce::Slider& slider(juce::Component& root,const char* name)
 void click(juce::Component& root,const char* name)
 {
     auto* c=find(root,[&](auto& x){auto* b=dynamic_cast<juce::Button*>(&x);return b&&b->getButtonText()==name;});
-    require(c!=nullptr,"native button missing");dynamic_cast<juce::Button*>(c)->triggerClick();juce::MessageManager::getInstance()->runDispatchLoopUntil(35);
+    require(c!=nullptr,"native button missing");
+    auto& button=*dynamic_cast<juce::Button*>(c);
+    ClickObserver observer(button);
+    button.triggerClick();
+    waitUntil([&]{return observer.delivered;},"native button click was not delivered");
 }
 }
 int runEditorTests()
@@ -29,18 +54,24 @@ int runEditorTests()
         require(e->getWidth()==1280&&std::abs(e->getHeight()-334)<=1,"Rack reference size changed");
         auto& gain=slider(*e,"Input gain");gain.setValue(18,juce::sendNotificationSync);
         require(std::abs(p.parameters.getRawParameterValue("inputDb")->load()-18)<.01f,"knob did not update APVTS");
-        auto* out=p.parameters.getParameter("outputDb");out->setValueNotifyingHost(out->convertTo0to1(-10));juce::MessageManager::getInstance()->runDispatchLoopUntil(30);
-        require(std::abs(slider(*e,"Output gain").getValue()+10)<.01,"automation did not update knob");
+        auto* out=p.parameters.getParameter("outputDb");out->setValueNotifyingHost(out->convertTo0to1(-10));
+        waitUntil([&]{return std::abs(slider(*e,"Output gain").getValue()+10)<.01;},"automation did not update knob");
         auto& atk=slider(*e,"Attack time, clockwise faster");const auto before=atk.getValue();atk.keyPressed(juce::KeyPress(juce::KeyPress::rightKey));require(atk.getValue()<before,"clockwise attack is not faster");
         click(*e,"8");click(*e,"ALL");require(p.parameters.getRawParameterValue("allButtons")->load()>.5,"ALL did not activate");click(*e,"ALL");require(p.parameters.getRawParameterValue("ratio")->load()==1,"ALL did not preserve ratio");
         click(*e,"REV H*");require(p.parameters.getRawParameterValue("revision")->load()==1,"Rev H button did not select audio model");
         click(*e,"REV D");require(p.parameters.getRawParameterValue("revision")->load()==0,"Rev D button did not restore model");
         click(*e,"DYNAMIC");require(p.editorMode.load()==1&&std::abs(e->getHeight()-508)<=1,"Dynamic reference size");require(std::abs(gain.getValue()-18)<.01,"view switch lost gain");
         click(*e,"RACK");require(std::abs(e->getHeight()-334)<=1,"Rack switch height");
-        FieldEffectProcessor restored;restored.editorMode.store(1);restored.editorWidth.store(1440);juce::MemoryBlock state;restored.getStateInformation(state);p.setStateInformation(state.getData(),(int)state.getSize());juce::MessageManager::getInstance()->runDispatchLoopUntil(60);
-        require(e->getWidth()==1440&&std::abs(e->getHeight()-572)<=1,"open editor did not follow restored view/width");
-        juce::AudioBuffer<float> silence(2,800);juce::MidiBuffer midi;silence.clear();for(int i=0;i<10;++i)p.processBlockBypassed(silence,midi);juce::MessageManager::getInstance()->runDispatchLoopUntil(40);
-        auto* power=find(*e,[](auto& c){return c.getTitle()=="Bypass compressor";});require(power!=nullptr,"bypass control missing");require(dynamic_cast<juce::Button*>(power)->getButtonText()=="OUT","host bypass did not reach effective bypass display");
+        FieldEffectProcessor restored;restored.editorMode.store(1);restored.editorWidth.store(1440);juce::MemoryBlock state;restored.getStateInformation(state);p.setStateInformation(state.getData(),(int)state.getSize());
+        waitUntil([&]{return e->getWidth()==1440&&std::abs(e->getHeight()-572)<=1;},"open editor did not follow restored view/width");
+        juce::AudioBuffer<float> silence(2,800);juce::MidiBuffer midi;
+        auto* power=find(*e,[](auto& c){return c.getTitle()=="Bypass compressor";});require(power!=nullptr,"bypass control missing");
+        waitUntil([&]{
+            // Model a running host: keep supplying fresh meter frames while
+            // the editor observes the bypass guard and consecutive frames.
+            silence.clear();p.processBlockBypassed(silence,midi);
+            return dynamic_cast<juce::Button*>(power)->getButtonText()=="OUT";
+        },"host bypass did not reach effective bypass display");
         require(p.parameters.getRawParameterValue("bypass")->load()<.5f,"host bypass corrupted user bypass parameter");
         std::cout<<"PASS native editor controls/automation/timing/ALL/view dimensions/state restore/host bypass\n";return 0;
     }catch(const std::exception& e){std::cerr<<"FAIL native editor: "<<e.what()<<'\n';return 1;}
