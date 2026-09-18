@@ -121,12 +121,11 @@ GitHub Actions 設定以下 Release 建置組合：
 | 平台 | 架構 | 格式 |
 | --- | --- | --- |
 | Windows | x64 | VST3、AAX Native |
-| macOS Intel | x86_64 | AU、VST3、AAX Native |
-| macOS Apple Silicon | arm64 | AU、VST3、AAX Native |
+| macOS Universal | Intel x86_64 ＋ Apple Silicon arm64 | AU、VST3、AAX Native |
 
 macOS 最低版本為 12。另可從原始碼建置 Standalone，直接選擇音訊裝置測試。
 
-從 repository 的 **Releases** 或 **Actions → Build plugins → Artifacts** 選擇平台、架構與格式。macOS 另提供 Intel（`x86_64`）及 Apple Silicon（`arm64`）各一份 DMG，內含三種格式的可選安裝程式及解除安裝工具。Windows 另提供 x64 安裝程式（`*-windows-x64-Setup.exe`），內含 VST3／AAX 與解除安裝功能。各下載檔均附 SHA-256 校驗檔；ZIP 內另附使用說明、`build-info.json`、`LICENSE`、`NOTICE` 與第三方來源聲明。請解開內層 ZIP，保留完整 `.component`、`.vst3` 或 `.aaxplugin` bundle，再放入對應外掛目錄。
+從 repository 的 **Releases** 或 **Actions → Build plugins → Artifacts** 選擇平台與格式。macOS 提供單一 Universal DMG，每個外掛同時包含 Intel（`x86_64`）與 Apple Silicon（`arm64`），內含三種格式的可選安裝程式及解除安裝工具。Windows 另提供 x64 安裝程式（`*-windows-x64-Setup.exe`），內含 VST3／AAX 與解除安裝功能。Release 只列出可安裝的 ZIP／DMG／EXE，不另提供雜湊檔案；CI 內部仍驗證完整性。ZIP 內附使用說明、`build-info.json`、`LICENSE`、`NOTICE` 與第三方來源聲明。請解開內層 ZIP，保留完整 `.component`、`.vst3` 或 `.aaxplugin` bundle，再放入對應外掛目錄。
 
 macOS AU 與 VST3 可使用以下使用者目錄：
 
@@ -141,7 +140,7 @@ macOS AU 與 VST3 可使用以下使用者目錄：
 
 ### macOS DMG 安裝與解除安裝
 
-1. 下載對應架構的 `HT-76-<版本>-<commit>-macos-<架構>-Installer.dmg`，關閉 DAW 後開啟。
+1. 下載 `HT-76-<版本>-<commit>-macos-universal-Installer.dmg`（Intel／Apple Silicon 通用），關閉 DAW 後開啟。
 2. 雙擊 `Install HT-76.pkg`，選擇需要的格式。AU／VST3／AAX 預設全勾選，可自行取消不需要的格式；AAX 供 Pro Tools Developer 測試。
 3. 依 macOS Installer 提示輸入管理員密碼。安裝完成後，重新啟動 DAW 並掃描外掛。
 
@@ -194,12 +193,12 @@ JUCE 固定為 **8.0.12**，commit [`29396c22c93392d6738e021b83196283d6e4d850`](
 ### macOS
 
 ```sh
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=arm64
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release '-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64'
 cmake --build build --config Release --parallel 4
 ctest --test-dir build -C Release --output-on-failure
 ```
 
-Intel 版本將 `arm64` 改成 `x86_64`；若需同時包含兩個架構，可使用 `-DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"`。測試程式需在可執行目標架構的環境中執行。
+預設發行 Universal 版本，同時包含兩個架構。若只需本機開發，可將架構改成 `arm64` 或 `x86_64`。測試程式需在可執行目標架構的環境中執行。
 
 Apple Silicon 也可直接執行 `./scripts/build-macos.sh`。編譯完成後，`./scripts/install-macos.sh` 會安裝 AU／VST3，並先備份既有同名外掛；AAX 不包含在此安裝腳本內。
 
@@ -230,9 +229,9 @@ git clone --branch 8.0.12 --depth 1 https://github.com/juce-framework/JUCE.git t
 
 ## GitHub Actions 與 Release
 
-[build-plugins.yml](.github/workflows/build-plugins.yml) 支援 push、Pull Request 與手動執行。三組平台各自編譯、執行測試、檢查架構並打包，全部成功時產生 **8 份外掛 ZIP、2 份 macOS DMG 與 1 份 Windows EXE artifacts**，另附建置紀錄。
+[build-plugins.yml](.github/workflows/build-plugins.yml) 支援 push、Pull Request 與手動執行。Windows x64 與 macOS Universal 各自編譯、執行測試、檢查架構並打包；Universal 產物另外送到 Intel runner 執行同一份測試程式與安裝／解除安裝測試。全部成功時產生 **5 份外掛 ZIP、1 份 Universal macOS DMG 與 1 份 Windows EXE**，另附 CI 建置紀錄。
 
-**推送 `v` 開頭的 tag，會在三組平台全部成功後自動發佈同名 GitHub Release。**
+**推送 `v` 開頭的 tag，會在建置與 Intel 驗證全部成功後自動發佈同名 GitHub Release。**
 
 新建 Release 的說明會自動附上 macOS Gatekeeper／簽署與公證狀態、Windows SmartScreen／未知發行者提示，以及未簽署 AAX 無法在正式版 Pro Tools 載入的限制，並提供各平台的官方說明連結。
 
@@ -243,7 +242,7 @@ git push origin v0.91
 
 `v0.91` 對應外掛版本 `0.9.1`，此次發行標示為 **Pre-release**，不設為 Latest。所有平台建置、測試與打包成功後才會公開發行。
 
-發佈工作驗證八份 ZIP、兩份 DMG、一份 Windows EXE 與各自的 SHA-256 檔案，先建立草稿，全部上傳完成才公開。重新執行會沿用同名 Release 並更新同名附件；immutable releases 啟用後無法覆寫已公開附件。一般分支、PR、手動執行和非 `v` 開頭 tag 只產生 Actions artifacts。
+發佈工作在 CI 內驗證五份 ZIP、一份 Universal DMG、一份 Windows EXE 與各自的 SHA-256，Release 只上傳這七份安裝下載檔，先建立草稿，全部上傳完成才公開。重新執行會沿用同名 Release 並更新同名附件；immutable releases 啟用後無法覆寫已公開附件。一般分支、PR、手動執行和非 `v` 開頭 tag 只產生 Actions artifacts。
 
 產品版本來自 `CMakeLists.txt`，**tag 不會自動修改外掛版本**；發佈前請同步更新 CMake 與 Projucer 的版本。ZIP／DMG／EXE 檔名包含產品版本、commit、平台、架構與格式。Actions 外掛 artifacts 保存 30 天、logs 保存 14 天；Release 附件不受此期限影響。
 
@@ -252,12 +251,12 @@ git push origin v0.91
 本機可使用相同打包程式：
 
 ```sh
-python3 scripts/package-plugins.py --build-dir build --platform macos --arch arm64 --formats AU VST3 AAX --output-dir dist
-python3 scripts/package-dmg.py --arch arm64 --archive-dir dist --output-dir dist
-python3 scripts/verify-dmg.py dist/HT-76-0.9.1-local-macos-arm64-Installer.dmg
+python3 scripts/package-plugins.py --build-dir build --platform macos --arch universal --formats AU VST3 AAX --output-dir dist
+python3 scripts/package-dmg.py --arch universal --archive-dir dist --output-dir dist
+python3 scripts/verify-dmg.py dist/HT-76-0.9.1-local-macos-universal-Installer.dmg
 ```
 
-DMG 工具使用 macOS 內建的 `pkgbuild`、`productbuild` 與 `hdiutil`。需先產生同一版本、架構及 revision 的 AU／VST3／AAX ZIP。`verify-dmg.py` 預設只掛載、展開與檢查安裝包；上述檔名應依實際版本調整。macOS CI 另在全新的 GitHub-hosted runner 上實際安裝三種格式、核對外掛與 receipts，再執行解除安裝及重複執行檢查。
+DMG 工具使用 macOS 內建的 `pkgbuild`、`productbuild` 與 `hdiutil`。需先產生同一版本、架構及 revision 的 AU／VST3／AAX ZIP。`verify-dmg.py` 預設只掛載、展開與檢查安裝包；上述檔名應依實際版本調整。macOS CI 會在 Apple Silicon 與 Intel 的全新 GitHub-hosted runner 上，使用同一份 Universal DMG 實際安裝三種格式、核對雙架構外掛與 receipts，再執行解除安裝及重複執行檢查。
 
 Windows 安裝程式使用 **Inno Setup 6.3+**（GitHub `windows-2022` runner 已預裝 Inno Setup 6）。本機 Windows 安裝 Inno Setup 6 與 Visual Studio 2022 C++ 工具後，可執行：
 
@@ -277,7 +276,7 @@ ctest --test-dir build -C Release --output-on-failure
 python3 -m unittest discover -s Tests -p 'test_package*.py' -v
 ```
 
-目前已完成本機 macOS arm64 建置、CTest、AU `auval`、AAX bundle 結構與打包驗證，以及 arm64 DMG 產生、掛載、PKG 內容與簽章檢查。DMG 與 Windows EXE 安裝／解除安裝的完整 CI 測試已設定，尚待 GitHub runner 實際執行；本機未產生或執行 Windows 安裝程式。Windows／Intel 的 CI 已設定，但尚未記錄實際 GitHub 執行結果；AAX 亦尚未在 Pro Tools 主機內驗證載入與播放。上述測試不代表已完成所有 DAW 相容性、長時間壓力測試或實體硬體音色比對。
+`v0.91` 原先分架構的 [GitHub Actions](https://github.com/Hikari-Tsai/HT-76/actions/runs/35358874019) 已通過 Windows x64、macOS Intel／ARM 的建置、音訊／介面測試、打包與安裝／解除安裝檢查。Universal 工作流程要求每個外掛包含兩個 Mach-O 架構，並在 Apple Silicon 與 Intel runner 執行同一份測試產物。AAX 尚未在 Pro Tools 主機內驗證載入與播放。上述測試不代表已完成所有 DAW 相容性、長時間壓力測試或實體硬體音色比對。
 
 ## 專案結構
 

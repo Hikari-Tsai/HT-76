@@ -7,6 +7,7 @@ from pathlib import Path
 import struct
 import tempfile
 import unittest
+from unittest import mock
 import zipfile
 
 spec = importlib.util.spec_from_file_location("packager", Path(__file__).resolve().parents[1] / "scripts/package-plugins.py")
@@ -46,6 +47,18 @@ class PackagingTests(unittest.TestCase):
                     self.assertEqual(sum(n.endswith(".aaxplugin") or n.endswith(".vst3") for n in names), 1)
                 digest = hashlib.sha256(archive.read_bytes()).hexdigest()
                 self.assertEqual(archive.with_suffix(".zip.sha256").read_text().split()[0], digest)
+
+    def test_universal_requires_both_macos_slices(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            binary = Path(temporary) / "HT-76"
+            binary.touch()
+            for slices in ("arm64 x86_64", "x86_64 arm64"):
+                with mock.patch.object(packager.subprocess, "check_output", return_value=slices):
+                    packager.validate_binary(binary, "macos", "universal")
+            for slices in ("arm64", "x86_64", "arm64 x86_64 i386", ""):
+                with mock.patch.object(packager.subprocess, "check_output", return_value=slices):
+                    with self.assertRaisesRegex(ValueError, "Expected"):
+                        packager.validate_binary(binary, "macos", "universal")
 
     def test_wrong_architecture_is_rejected(self):
         with tempfile.TemporaryDirectory() as temporary:

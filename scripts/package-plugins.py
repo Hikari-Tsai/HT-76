@@ -15,6 +15,8 @@ import zipfile
 
 PROJECT = Path(__file__).resolve().parents[1]
 PRODUCT = "HT-76"
+MACOS_ARCHITECTURES = {"arm64": ("arm64",), "x86_64": ("x86_64",),
+                       "universal": ("arm64", "x86_64")}
 EXTENSIONS = {"AU": "component", "VST3": "vst3", "AAX": "aaxplugin"}
 
 
@@ -30,8 +32,9 @@ def validate_binary(binary, platform, arch):
         raise ValueError(f"Missing plugin executable: {binary}")
     if platform == "macos":
         actual = subprocess.check_output(["lipo", "-archs", str(binary)], text=True).split()
-        if actual != [arch]:
-            raise ValueError(f"Expected {arch}, found {actual}: {binary}")
+        expected = MACOS_ARCHITECTURES.get(arch)
+        if expected is None or set(actual) != set(expected) or len(actual) != len(expected):
+            raise ValueError(f"Expected {arch} ({expected}), found {actual}: {binary}")
     else:
         with binary.open("rb") as stream:
             if stream.read(2) != b"MZ":
@@ -45,7 +48,7 @@ def validate_binary(binary, platform, arch):
 
 
 def package(build_dir, output_dir, platform, arch, formats, revision):
-    if (platform, arch) not in {("macos", "arm64"), ("macos", "x86_64"), ("windows", "x64")}:
+    if (platform, arch) not in {("macos", "arm64"), ("macos", "x86_64"), ("macos", "universal"), ("windows", "x64")}:
         raise ValueError(f"Unsupported platform/architecture: {platform}/{arch}")
     if not formats or any(f not in EXTENSIONS or (platform == "windows" and f == "AU") for f in formats):
         raise ValueError(f"Unsupported formats for {platform}: {formats}")
@@ -82,7 +85,7 @@ def package(build_dir, output_dir, platform, arch, formats, revision):
             shutil.copytree(PROJECT / "third_party" / "licenses", notices / "licenses")
             if platform == "macos":
                 subprocess.run(["codesign", "--force", "--sign", "-", str(copied)], check=True)
-                subprocess.run(["codesign", "--verify", "--deep", "--strict", str(copied)], check=True)
+                subprocess.run(["codesign", "--verify", "--all-architectures", "--deep", "--strict", str(copied)], check=True)
             metadata = {"product": PRODUCT, "version": version, "revision": revision,
                         "platform": platform, "architecture": arch, "format": format_name,
                         "configuration": "Release", "pace_signed": False,
@@ -119,7 +122,7 @@ if __name__ == "__main__":
     parser.add_argument("--build-dir", type=Path, default=Path("build"))
     parser.add_argument("--output-dir", type=Path, default=Path("dist"))
     parser.add_argument("--platform", choices=["macos", "windows"], required=True)
-    parser.add_argument("--arch", choices=["arm64", "x86_64", "x64"], required=True)
+    parser.add_argument("--arch", choices=["arm64", "x86_64", "universal", "x64"], required=True)
     parser.add_argument("--formats", nargs="+", choices=list(EXTENSIONS), required=True)
     args = parser.parse_args()
     package(args.build_dir, args.output_dir, args.platform, args.arch, args.formats,

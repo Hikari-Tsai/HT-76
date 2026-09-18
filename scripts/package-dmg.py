@@ -32,10 +32,16 @@ def run(*args):
     subprocess.run([str(arg) for arg in args], check=True)
 
 
+def host_architectures(arch):
+    if arch not in packager.MACOS_ARCHITECTURES:
+        raise ValueError(f'Invalid macOS architecture: {arch}')
+    return ','.join(packager.MACOS_ARCHITECTURES[arch])
+
+
 def distribution(version, arch):
     root = ET.Element('installer-gui-script', minSpecVersion='2')
     ET.SubElement(root, 'title').text = f'HT-76 {version} ({arch})'
-    ET.SubElement(root, 'options', customize='always', hostArchitectures=arch, **{'require-scripts': 'false'})
+    ET.SubElement(root, 'options', customize='always', hostArchitectures=host_architectures(arch), **{'require-scripts': 'false'})
     ET.SubElement(root, 'domains', enable_anywhere='false', enable_currentUserHome='false', enable_localSystem='true')
     ET.SubElement(root, 'welcome', file='README.txt', **{'mime-type': 'text/plain'})
     ET.SubElement(ET.SubElement(root, 'volume-check'), 'allowed-os-versions')
@@ -78,7 +84,7 @@ def read_archive(archive, fmt, arch, version, revision):
 def package(archive_dir, output_dir, arch, revision):
     if sys.platform != 'darwin':
         raise ValueError('DMG packaging requires macOS.')
-    if arch not in ('arm64', 'x86_64') or not re.fullmatch(r'[a-fA-F0-9]{7,40}|local', revision):
+    if arch not in packager.MACOS_ARCHITECTURES or not re.fullmatch(r'[a-fA-F0-9]{7,40}|local', revision):
         raise ValueError('Invalid architecture or revision.')
     version = re.search(r'project\(HT-76\s+VERSION\s+(\d+\.\d+\.\d+)', (PROJECT / 'CMakeLists.txt').read_text()).group(1)
     label = f'HT-76-{version}-{revision[:12]}-macos-{arch}'
@@ -103,7 +109,7 @@ def package(archive_dir, output_dir, arch, revision):
             info = plistlib.loads((bundle / 'Contents/Info.plist').read_bytes())
             if info.get('CFBundleIdentifier') != BUNDLE_ID or info.get('CFBundleShortVersionString') != version:
                 raise ValueError(f'Unexpected bundle identity/version: {bundle}')
-            run('/usr/bin/codesign', '--verify', '--deep', '--strict', bundle)
+            run('/usr/bin/codesign', '--verify', '--all-architectures', '--deep', '--strict', bundle)
             payload = work / f'payload-{fmt}'
             payload.mkdir()
             run('/usr/bin/ditto', bundle, payload / bundle.name)
@@ -192,6 +198,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--archive-dir', type=Path, default=Path('dist'))
     parser.add_argument('--output-dir', type=Path, default=Path('dist'))
-    parser.add_argument('--arch', choices=['arm64', 'x86_64'], required=True)
+    parser.add_argument('--arch', choices=['arm64', 'x86_64', 'universal'], required=True)
     args = parser.parse_args()
     package(args.archive_dir, args.output_dir, args.arch, os.environ.get('GITHUB_SHA', 'local'))

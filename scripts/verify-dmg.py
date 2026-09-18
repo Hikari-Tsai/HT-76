@@ -46,7 +46,7 @@ def verify(image, install_test=False):
             expanded = work / 'expanded'
             dmg.run('/usr/sbin/pkgutil', '--expand-full', installer, expanded)
             definition = ET.parse(expanded / 'Distribution')
-            if definition.find('options').get('hostArchitectures') != arch:
+            if definition.find('options').get('hostArchitectures') != dmg.host_architectures(arch):
                 raise ValueError('Installer architecture mismatch')
             for fmt, (extension, destination) in dmg.FORMATS.items():
                 choice = definition.find(f"choice[@id='{fmt}']")
@@ -62,7 +62,7 @@ def verify(image, install_test=False):
                 if plistlib.loads((bundle / 'Contents/Info.plist').read_bytes()).get('CFBundleIdentifier') != dmg.BUNDLE_ID:
                     raise ValueError(f'Wrong bundle identity for {fmt}')
                 dmg.packager.validate_binary(dmg.packager.executable_path(bundle, 'macos', fmt), 'macos', arch)
-                dmg.run('/usr/bin/codesign', '--verify', '--deep', '--strict', bundle)
+                dmg.run('/usr/bin/codesign', '--verify', '--all-architectures', '--deep', '--strict', bundle)
             dmg.run('/usr/sbin/installer', '-showChoicesXML', '-pkg', installer, '-target', '/')
             if install_test:
                 # Never replace an existing installation even on the disposable CI runner.
@@ -77,7 +77,7 @@ def verify(image, install_test=False):
                 for fmt, (extension, destination) in dmg.FORMATS.items():
                     bundle = Path(destination) / f'HT-76.{extension}'
                     dmg.packager.validate_binary(dmg.packager.executable_path(bundle, 'macos', fmt), 'macos', arch)
-                    dmg.run('/usr/bin/codesign', '--verify', '--deep', '--strict', bundle)
+                    dmg.run('/usr/bin/codesign', '--verify', '--all-architectures', '--deep', '--strict', bundle)
                     dmg.run('/usr/sbin/pkgutil', '--pkg-info', f'com.hikaritsai.ht76.pkg.{fmt.lower()}')
                 subprocess.run(['/bin/bash', str(uninstaller)], input='UNINSTALL\n', text=True, check=True)
                 for fmt, (extension, destination) in dmg.FORMATS.items():

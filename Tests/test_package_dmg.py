@@ -20,9 +20,10 @@ spec.loader.exec_module(dmg)
 
 class DmgTests(unittest.TestCase):
     def test_choices_architecture_locations_and_all_formats_selected(self):
-        for arch in ('arm64', 'x86_64'):
+        for arch in ('arm64', 'x86_64', 'universal'):
             xml = ET.fromstring(dmg.distribution('1.0.0', arch))
-            self.assertEqual(xml.find('options').get('hostArchitectures'), arch)
+            expected = 'arm64,x86_64' if arch == 'universal' else arch
+            self.assertEqual(xml.find('options').get('hostArchitectures'), expected)
             self.assertEqual(xml.find('domains').get('enable_anywhere'), 'false')
             self.assertEqual(xml.find('volume-check/allowed-os-versions/os-version').get('min'), '12.0')
             choices = {node.get('id'): node for node in xml.findall('choice')}
@@ -55,6 +56,13 @@ class DmgTests(unittest.TestCase):
                 dmg.read_archive(archive, 'AU', 'x86_64', '1.0.0', 'local')
             archive.with_suffix('.zip.sha256').write_text('0' * 64 + '  test.zip\n')
             with self.assertRaisesRegex(ValueError, 'Checksum mismatch'):
+                dmg.read_archive(archive, 'AU', 'arm64', '1.0.0', 'local')
+
+    def test_universal_archive_metadata(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            archive = self.archive(Path(temporary), arch='universal')
+            dmg.read_archive(archive, 'AU', 'universal', '1.0.0', 'local')
+            with self.assertRaisesRegex(ValueError, 'architecture'):
                 dmg.read_archive(archive, 'AU', 'arm64', '1.0.0', 'local')
 
     def test_rejects_archive_path_escape(self):
