@@ -1,0 +1,13 @@
+/build*/
+/Builds/MacOSX/build/
+.DS_Store
+/third_party/JUCE/
+/dist/
+/ci-logs/
+__pycache__/
+
+# Generated exports, local renders and preview captures
+/Builds/
+/JuceLibraryCode/
+/output/
+/design/previews/

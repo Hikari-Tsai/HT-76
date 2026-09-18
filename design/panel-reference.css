@@ -1,0 +1,94 @@
+/* v5: coordinates and aspect ratios measured from the supplied concept board.
+   Rack 1753 × 457; Dynamic 1753 × 695, each mapped to a 1280 px stage. */
+#fet-panel-study{--fp-ink:#cfc5aa;--fp-muted:#a59e8c;--fp-teal:#71bdae;--fp-amber:#edb552;--fp-base:#191a1b;--fp-paper:url("__PAPER_TEXTURE__")}
+#fet-panel-study .fp-window{position:relative;width:1280px;height:333.69px;border-color:#515352;display:grid;grid-template-rows:36px minmax(0,1fr);background:#191a1b}
+#fet-panel-study .fp-window[data-panel=dynamic]{height:507.47px}
+#fet-panel-study .fp-top{height:36px;min-height:0;padding:3px 58px 3px 78px;gap:12px;flex-wrap:nowrap;background:linear-gradient(#ffffff04,#00000022),var(--fp-metal);background-size:auto,132px 84px}
+#fet-panel-study .fp-brand{min-width:0;justify-content:flex-start;gap:10px}
+#fet-panel-study .fp-brand strong{font-size:24px;letter-spacing:-1px;color:#d5ccb2}
+#fet-panel-study .fp-brand small{font-size:11px;letter-spacing:1.6px;color:#c6bda6}
+#fet-panel-study .fp-brand i{height:16px;background:#a69d87}
+#fet-panel-study .fp-switch{flex:0 0 auto;padding:1px}
+#fet-panel-study .fp-switch button{padding:4px 13px;font-size:10px}
+#fet-panel-study .fp-top>.fp-power{display:none}
+#fet-panel-study .fp-footer,#fet-panel-study .fp-status{display:none}
+#fet-panel-study .fp-rack-view{height:100%;min-height:0}
+#fet-panel-study .fp-rack{height:100%;padding:0 56px;display:grid;grid-template-rows:234px 60px;background:linear-gradient(105deg,#ffffff02,#00000013),var(--fp-metal);background-size:auto,132px 84px}
+#fet-panel-study .fp-rack:before,#fet-panel-study .fp-rack:after{display:none}
+#fet-panel-study .fp-ear{position:absolute;z-index:4;top:0;bottom:0;width:56px;left:0;background:linear-gradient(90deg,#282a2b,#313334 65%,#202222);border-right:2px solid #070808;box-shadow:inset 0 1px #6a6b6555;pointer-events:none}
+#fet-panel-study .fp-ear.right{left:auto;right:0;border-right:0;border-left:2px solid #070808}
+#fet-panel-study .fp-ear:before,#fet-panel-study .fp-ear:after{content:"";position:absolute;left:8px;top:39px;width:31px;height:21px;background:#020303;border-radius:9px;box-shadow:inset 0 2px 3px #000,0 1px 1px #7c7d7166}
+#fet-panel-study .fp-ear:after{top:auto;bottom:62px}
+#fet-panel-study .fp-window[data-panel=dynamic]>.fp-ear{display:none}
+#fet-panel-study .fp-window[data-panel=dynamic] .fp-top{padding-left:42px}
+#fet-panel-study .fp-screw{width:18px;height:18px;left:67px;top:13px}
+#fet-panel-study .fp-screw:after{left:3px;top:8px;width:12px;height:2px}
+#fet-panel-study .fp-screw:nth-child(2){right:67px}
+#fet-panel-study .fp-screw:nth-child(3){bottom:74px}
+#fet-panel-study .fp-screw:nth-child(4){right:67px;bottom:74px}
+#fet-panel-study .fp-rack-controls{position:relative;display:block;min-height:0;height:234px}
+#fet-panel-study .fp-rack-controls>.fp-control{position:absolute;top:35px;width:160px}
+#fet-panel-study .fp-rack-controls>[data-control=input]{left:61px}
+#fet-panel-study .fp-rack-controls>[data-control=output]{left:292px}
+#fet-panel-study .fp-rack .fp-control:not(.fp-small-knob) .fp-knob-wrap{width:143px;height:143px;margin:0;order:1}
+#fet-panel-study .fp-rack .fp-control:not(.fp-small-knob) .fp-control-label{font-size:13px;line-height:18px;margin-top:0;order:2}
+#fet-panel-study .fp-rack .fp-control-value{display:none}
+#fet-panel-study .fp-timing{position:absolute;left:514px;top:11px;width:122px;gap:5px}
+#fet-panel-study .fp-timing .fp-control-label{font-size:10px;line-height:14px}
+#fet-panel-study .fp-timing .fp-knob-wrap{width:81px;height:81px;margin:1px auto 0}
+#fet-panel-study .fp-timing .fp-direction{display:flex;margin:-4px auto 0;max-width:90px;font-size:9px;line-height:13px}
+#fet-panel-study .fp-rack .fp-ratio-block{position:absolute;left:693px;top:11px;width:86px}
+#fet-panel-study .fp-rack .fp-ratio-block>.fp-control-label{font-size:10px;line-height:15px}
+#fet-panel-study .fp-rack .fp-ratios{width:47px;gap:3px;margin:3px auto 0;padding:3px}
+#fet-panel-study .fp-rack .fp-ratios button{flex:none;width:39px;height:30px;min-height:0;padding:3px;font-size:12px;line-height:20px}
+#fet-panel-study .fp-rack .fp-ratios button[data-ratio=all]{margin-top:4px;font-size:11px}
+#fet-panel-study .fp-vu-box{position:absolute;left:837px;top:30px;width:262px}
+#fet-panel-study .fp-vu-box:before{content:"";position:absolute;left:-26px;top:0;height:157px;border-left:1px solid #8a826255}
+#fet-panel-study .fp-vu{height:137px;width:100%;border-width:8px;background:radial-gradient(ellipse at 50% 40%,#f4e4b01c,transparent 60%,#37261566),var(--fp-paper);background-size:auto,32px 26px;box-shadow:0 0 0 1px #65655c,0 0 0 3px #070909,0 0 0 4px #474943,inset 0 2px 9px #594526bb}
+#fet-panel-study .fp-meter-caption{font-size:9px;letter-spacing:1.1px;line-height:12px;text-align:center;margin-top:9px}
+#fet-panel-study .fp-meter-select{margin:3px auto 0;padding:3px;gap:3px}
+#fet-panel-study .fp-meter-select button{padding:4px 12px;font-size:11px;line-height:18px}
+#fet-panel-study .fp-rack-strip{height:60px;width:100%;margin:0;border-top:2px solid #060707}
+#fet-panel-study .fp-scale-number{position:absolute;transform:translate(-50%,-50%);font:10px ui-monospace,SFMono-Regular,Menlo,monospace;color:#c9bea2;white-space:nowrap}
+#fet-panel-study .fp-knob-scale{inset:8%}
+#fet-panel-study .fp-knob{inset:14%}
+#fet-panel-study .fp-scale-dot{width:2px;height:2px}
+#fet-panel-study .fp-scale-dot:nth-child(3n+1){width:3px;height:3px}
+#fet-panel-study .fp-pointer:before{background:linear-gradient(90deg,#8c826a,#e4d8b7 27%,#d5c9a9 65%,#a49775)}
+#fet-panel-study .fp-dynamic-view{min-height:0;height:100%;display:grid;grid-template-rows:282px minmax(0,1fr);background:#101619;padding:0 5px 5px}
+#fet-panel-study .fp-visuals{grid-template-columns:minmax(0,1fr) 365px;gap:4px;padding:0 0 4px;min-height:0}
+#fet-panel-study .fp-chart-shell{border:1px solid #363c3e;border-radius:2px;background:radial-gradient(ellipse at 50% 80%,#112024,#0b1013 85%)}
+#fet-panel-study .fp-legend{padding:13px 45px 5px;gap:28px;font-size:10px;line-height:14px;color:#beb59e}
+#fet-panel-study .fp-chart{height:242px;width:100%}
+#fet-panel-study .fp-meter-canvas{height:277px;width:100%;border:1px solid #363c3e;border-radius:2px;background:linear-gradient(105deg,#111719,#0c1114)}
+#fet-panel-study .fp-deck{display:grid;grid-template-columns:238px 180px 180px 210px 315px minmax(0,1fr);grid-template-rows:1fr;gap:0;min-height:0;padding:12px 0 10px;border:1px solid #373c3d;border-radius:2px;background:linear-gradient(110deg,#00000062,#00000082),var(--fp-metal);background-size:auto,132px 84px;box-shadow:inset 0 1px #68706f33}
+#fet-panel-study .fp-deck .fp-control{height:157px}
+#fet-panel-study .fp-deck .fp-control-label{font-size:12px;line-height:18px}
+#fet-panel-study .fp-deck .fp-knob-wrap{width:120px;height:116px;margin:0 auto}
+#fet-panel-study .fp-deck .fp-control-value{font-size:14px;line-height:18px;padding:2px 7px;min-width:76px}
+#fet-panel-study .fp-deck .fp-control-value small{font-size:10px}
+#fet-panel-study .fp-deck .fp-small-knob .fp-knob-wrap{width:92px;height:97px;margin:1px auto 0}
+#fet-panel-study .fp-deck .fp-direction{display:flex;font-size:9px;line-height:13px;margin:0 auto 5px;max-width:87px}
+#fet-panel-study .fp-deck [data-control=input]:after,#fet-panel-study .fp-deck [data-control=release]:after{content:"";position:absolute;right:0;top:7px;bottom:4px;border-right:1px solid #59605b66;box-shadow:1px 0 #050809}
+#fet-panel-study .fp-deck .fp-ratio-block{grid-column:auto;grid-row:auto;padding:0 16px 0 7px}
+#fet-panel-study .fp-deck .fp-ratios{margin:23px 0 14px;padding:3px;gap:2px}
+#fet-panel-study .fp-deck .fp-ratios button{font-size:14px;min-width:0;padding:10px 3px;line-height:20px}
+#fet-panel-study .fp-deck .fp-ratio-note{display:none}
+#fet-panel-study .fp-bypass-block{height:148px;border-left:1px solid #535b5466;margin-left:0;text-align:center;display:flex;flex-direction:column;align-items:center;padding-top:20px;gap:18px}
+#fet-panel-study .fp-bypass-block .fp-control-label{font-size:11px}
+#fet-panel-study .fp-bypass-block .fp-power{height:48px;width:49px;padding:0;font-size:17px;border:3px solid #474b49;box-shadow:0 0 0 2px #060809,inset 0 0 0 2px #090c0d;color:#e9ae53}
+#fet-panel-study .fp-bypass-light{width:7px;height:7px;background:#f9c46b;border-radius:50%;box-shadow:0 0 4px #ffae31,0 0 0 2px #4c3f2b}
+#fet-panel-study .fp-bypassed .fp-bypass-light{background:#554c3b;box-shadow:0 0 0 2px #302d24}
+/* v6: larger gain knobs; focus follows the knob rim, clear of scale lettering. */
+#fet-panel-study .fp-rack .fp-control:not(.fp-small-knob) .fp-knob-wrap{width:156px;height:156px}
+#fet-panel-study .fp-deck .fp-control:not(.fp-small-knob) .fp-knob-wrap{width:124px;height:124px}
+#fet-panel-study .fp-control:not(.fp-small-knob) .fp-knob{inset:10%}
+#fet-panel-study .fp-control:not(.fp-small-knob) .fp-knob-scale{inset:4%}
+#fet-panel-study .fp-knob-wrap:focus-within{outline:none}
+#fet-panel-study .fp-knob-wrap input:focus-visible{outline:none}
+#fet-panel-study .fp-knob-wrap:focus-within .fp-knob:after{content:"";position:absolute;inset:2.5%;border:1.5px solid #d6b775;border-radius:50%;box-shadow:0 0 0 1px #090b0a;pointer-events:none}
+#fet-panel-study .fp-rack .fp-ratios{width:66px}
+#fet-panel-study .fp-rack .fp-ratios button{width:58px;height:28px;line-height:18px;border-radius:0}
+#fet-panel-study .fp-deck .fp-ratios button{height:32px;padding:4px 3px;line-height:22px;border-radius:0}
+#fet-panel-study .fp-meter-select button{width:62px;height:27px;padding:3px 0;line-height:19px;border-radius:0}
+#fet-panel-study .fp-deck .fp-control:not(.fp-small-knob) .fp-knob-wrap{margin-bottom:-8px}

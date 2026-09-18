@@ -1,0 +1,20 @@
+HT-76
+Copyright 2026 HT-76 contributors
+
+Original HT-76 code, documentation, and project assets are licensed under the
+Apache License, Version 2.0. See LICENSE. Third-party materials retain their
+original licenses and copyright notices; they are not relicensed by this notice.
+
+This project incorporates fetcomp-dsp by Paul Ulrix:
+https://github.com/Paulllux/fetcomp-dsp
+Copyright (c) 2026 Paul Ulrix. MIT License.
+See third_party/fetcomp-dsp/LICENSE and LOCAL_CHANGES.md for local modifications.
+
+MathUtils.h credits mathematical approximations from chowdsp_utils by
+Jatin Chowdhury / Chowdhury DSP, under BSD 3-Clause.
+https://github.com/Chowdhury-DSP/chowdsp_utils
+See third_party/licenses/ for the retained upstream notices.
+
+JUCE and its bundled SDKs, including AAX, retain their own license terms.
+The Apache license for HT-76 does not replace those dependency terms.
+See third_party/DEPENDENCIES.md for versions, sources, and license locations.

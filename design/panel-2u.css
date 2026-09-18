@@ -1,0 +1,70 @@
+/* A single 1100 × (1100 × 3.5 / 19) stage. Both views preserve the 2U silhouette.
+   CSS zoom scales the complete review model; the target JUCE editor uses the same ratio. */
+#fet-panel-study{--fp-ink:#cbd7dc;--fp-muted:#9eafb8;--fp-amber:#c8ab78;--fp-base:#1b242d}
+#fet-panel-study .fp-window{width:1100px;height:202.631579px;display:grid;grid-template-rows:29px minmax(0,1fr);border-radius:3px;border-color:#5b6972;background:#1b242d;overflow:hidden}
+#fet-panel-study .fp-top{height:29px;min-height:0;padding:2px 25px;gap:16px;flex-wrap:nowrap;border-bottom:1px solid #070c10;background:linear-gradient(100deg,#2b466a18,#08142188),var(--fp-metal);background-size:auto,132px 84px}
+#fet-panel-study .fp-brand{min-width:0;justify-content:flex-start;gap:10px}
+#fet-panel-study .fp-brand strong{font-size:19px;letter-spacing:-.8px;color:#d9e0df}
+#fet-panel-study .fp-brand small{font-size:8px;letter-spacing:1.8px;color:#bfcbd0}
+#fet-panel-study .fp-brand i{height:15px;background:#8a9ba3}
+#fet-panel-study .fp-switch{padding:1px;flex:0 0 auto}
+#fet-panel-study .fp-switch button{padding:2px 12px;font-size:8px;flex:none}
+#fet-panel-study .fp-switch button[aria-pressed=true]{color:#bfd3df;text-shadow:none;background:linear-gradient(#31424e,#182631)}
+#fet-panel-study .fp-switch button[aria-pressed=true]:before{width:4px;height:4px;margin-right:6px;background:#acd5eb;box-shadow:0 0 4px #6bb9dd66}
+#fet-panel-study .fp-power{padding:3px 10px;font-size:8px;color:#cad6da;background:linear-gradient(#2c3941,#17232b);border-color:#51636d}
+#fet-panel-study .fp-footer{display:none}
+#fet-panel-study .fp-rack-view{height:100%;min-height:0}
+#fet-panel-study .fp-rack{height:100%;padding:5px 40px 2px;display:grid;grid-template-rows:minmax(0,1fr) 22px;gap:4px;background:linear-gradient(100deg,#29466610,#08152155),var(--fp-metal);background-size:auto,132px 84px}
+#fet-panel-study .fp-rack:before,#fet-panel-study .fp-rack:after{width:27px;background:linear-gradient(90deg,#151e27,#3a4852 45%,#202d36 90%)}
+#fet-panel-study .fp-screw{top:16px;left:8px;width:11px;height:11px}#fet-panel-study .fp-screw:nth-child(2){right:8px}#fet-panel-study .fp-screw:nth-child(3){bottom:16px}#fet-panel-study .fp-screw:nth-child(4){right:8px;bottom:16px}
+#fet-panel-study .fp-rack-controls{min-height:0;grid-template-columns:1fr 1fr .74fr .48fr 2.15fr;gap:26px;height:100%;align-items:center}
+#fet-panel-study .fp-rack .fp-control:not(.fp-small-knob) .fp-knob-wrap{width:105px;height:105px;margin:0;order:1}
+#fet-panel-study .fp-rack .fp-control:not(.fp-small-knob) .fp-control-label{margin-top:0;font-size:10px;line-height:12px;order:2}
+#fet-panel-study .fp-rack .fp-control-value{font-size:9px;padding:1px 0;line-height:11px;order:3;color:#b8c6cd}
+#fet-panel-study .fp-rack .fp-control-value small{font-size:8px}
+#fet-panel-study .fp-timing{grid-column:auto;flex-direction:column;justify-content:center;gap:3px}
+#fet-panel-study .fp-timing .fp-control-label{font-size:8px;line-height:10px}
+#fet-panel-study .fp-timing .fp-knob-wrap{width:43px;height:43px;margin:0 auto}
+#fet-panel-study .fp-timing .fp-direction{display:none}
+#fet-panel-study .fp-timing .fp-control-value{font-size:8px;padding:0;line-height:10px}
+#fet-panel-study .fp-timing .fp-control-value small{font-size:7px}
+#fet-panel-study .fp-rack .fp-ratio-block{grid-column:auto}
+#fet-panel-study .fp-rack .fp-ratio-block .fp-control-label{font-size:8px;line-height:10px}
+#fet-panel-study .fp-rack .fp-ratios{width:35px;margin:3px auto 0;padding:2px;flex-direction:column;gap:2px}
+#fet-panel-study .fp-rack .fp-ratios button{flex:none;width:29px;height:19px;min-width:0;min-height:0;padding:1px;font-size:9px;line-height:15px}
+#fet-panel-study .fp-rack .fp-ratios button[data-ratio=all]{font-size:7px}
+#fet-panel-study .fp-vu-box{grid-column:auto;width:240px;justify-self:center}
+#fet-panel-study .fp-vu{width:100%;height:99px;border-width:5px;background:radial-gradient(ellipse at 50% 30%,#e2e7e1,#cdd4ce 70%,#a1afa9);box-shadow:0 0 0 1px #617079,0 0 0 3px #101920,inset 0 2px 7px #42565b66}
+#fet-panel-study .fp-meter-select{margin:7px auto 0;padding:2px;gap:2px}
+#fet-panel-study .fp-meter-select button{padding:2px 9px;font-size:8px;line-height:11px}
+#fet-panel-study .fp-rack-strip{width:100%;height:22px;margin:0;border-top:1px solid #090f14;box-shadow:0 -1px #8198a522}
+#fet-panel-study .fp-control-label{color:#cbd7dc;text-shadow:0 1px #000}
+#fet-panel-study .fp-scale-dot{background:#c4d1d5;width:2px;height:2px}
+#fet-panel-study .fp-scale-dot:nth-child(3n+1){width:3px;height:3px}
+#fet-panel-study .fp-pointer:before{background:linear-gradient(90deg,#7c9099,#e2e9e7 27%,#d1ddde 65%,#96a9b0)}
+#fet-panel-study .fp-rack .fp-pointer:before{width:3.5px;left:calc(50% - 1.75px)}
+#fet-panel-study .fp-timing .fp-pointer:before{width:2px;left:calc(50% - 1px)}
+#fet-panel-study .fp-ratios button{color:#bfccd2;background:linear-gradient(125deg,#303d46,#19242d 55%,#111a22);border-color:#445460}
+#fet-panel-study .fp-ratios button[aria-pressed=true],#fet-panel-study .fp-ratios button[data-ratio=all][aria-pressed=true],#fet-panel-study .fp-meter-select button[aria-pressed=true]{background:radial-gradient(ellipse at 50% 40%,#e3d1a5,#c4aa76 65%,#877247);color:#263039;border-color:#a89b7e;box-shadow:inset 0 0 0 1px #65615088,inset 0 0 5px #685f4266}
+#fet-panel-study .fp-ratios button[data-ratio=all]{color:#c5b58f}
+#fet-panel-study .fp-dynamic-view{height:100%;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 330px;background:linear-gradient(120deg,#10202b,#0c151d)}
+#fet-panel-study .fp-status{display:none}
+#fet-panel-study .fp-visuals{grid-template-columns:minmax(0,1fr) 118px;gap:2px;padding:3px 5px 1px 6px;min-height:0}
+#fet-panel-study .fp-legend{padding:3px 14px 0;gap:15px;font-size:8px;line-height:16px;flex-wrap:nowrap;justify-content:flex-start;color:#b5c4cd}
+#fet-panel-study .fp-legend b{width:10px}
+#fet-panel-study .fp-chart{height:149px;width:100%}
+#fet-panel-study .fp-meter-canvas{height:166px;width:100%;border-left:1px solid #344653;border-top:0}
+#fet-panel-study .fp-deck{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:88px 63px;gap:0 4px;min-height:0;padding:8px 8px 7px;border-top:0;border-left:1px solid #5e788666;background:linear-gradient(100deg,#1f3b5818,#07152366),var(--fp-metal);background-size:auto,132px 84px}
+#fet-panel-study .fp-deck .fp-control-label{font-size:8px;letter-spacing:.7px;line-height:11px}
+#fet-panel-study .fp-deck .fp-knob-wrap{width:58px;height:58px;margin:1px auto 0}
+#fet-panel-study .fp-deck .fp-control-value{min-width:59px;font-size:10px;padding:1px 3px;line-height:13px;color:#89bacc;background:#07131c;border-color:#364e5b}
+#fet-panel-study .fp-deck .fp-control-value small{font-size:7px;margin-left:2px}
+#fet-panel-study .fp-deck .fp-direction{display:none}
+#fet-panel-study .fp-deck .fp-ratio-block{grid-column:1/-1;grid-row:2}
+#fet-panel-study .fp-deck .fp-ratio-block .fp-control-label{font-size:8px}
+#fet-panel-study .fp-deck .fp-ratios{max-width:none;width:100%;margin:4px 0;padding:2px;gap:2px}
+#fet-panel-study .fp-deck .fp-ratios button{min-width:0;padding:4px 2px;font-size:9px;line-height:13px}
+#fet-panel-study .fp-deck .fp-ratio-note{font-size:7px;line-height:10px;color:#9eafb8}
+#fet-panel-study .fp-deck .fp-pointer:before{width:2px;left:calc(50% - 1px)}
+#fet-panel-study .fp-demo{margin-top:14px;color:#a3b1ba}#fet-panel-study .fp-demo button,#fet-panel-study .fp-demo select{color:#c3d0d7;background:#17232c;border-color:#425664}
+#fet-panel-study .fp-note{color:#93a5b0}

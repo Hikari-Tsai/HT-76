@@ -1,0 +1,24 @@
+Source: https://github.com/Chowdhury-DSP/chowdsp_utils/blob/master/modules/dsp/chowdsp_math/chowdsp_math.h
+
+/*
+==============================================================================
+
+BEGIN_JUCE_MODULE_DECLARATION
+
+   ID:            chowdsp_math
+   vendor:        Chowdhury DSP
+   version:       2.4.0
+   name:          ChowDSP Math Utilities
+   description:   Math utilities for ChowDSP plugins
+   dependencies:  chowdsp_data_structures, chowdsp_simd
+
+   website:       https://ccrma.stanford.edu/~jatin/chowdsp
+   license:       BSD 3-clause
+
+   END_JUCE_MODULE_DECLARATION
+
+==============================================================================
+*/
+
+
+The vendored fetcomp-dsp MathUtils.h credits Jatin Chowdhury and the chowdsp_math_approx approximations. The module declares BSD 3-clause; the repository root LICENSE.md is also retained alongside this notice.

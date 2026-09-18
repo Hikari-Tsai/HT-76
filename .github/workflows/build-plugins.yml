@@ -1,0 +1,273 @@
+name: Build plugins
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: plugins-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.platform }} ${{ matrix.arch }} / Release
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: windows-2022
+            platform: windows
+            arch: x64
+            formats: VST3 AAX
+          - runner: macos-15-intel
+            platform: macos
+            arch: x86_64
+            formats: AU VST3 AAX
+          - runner: macos-15
+            platform: macos
+            arch: arm64
+            formats: AU VST3 AAX
+    defaults:
+      run:
+        shell: bash
+    env:
+      BUILD_DIR: build-ci
+      BUILD_PLATFORM: ${{ matrix.platform }}
+      BUILD_ARCH: ${{ matrix.arch }}
+      BUILD_FORMATS: ${{ matrix.formats }}
+      CMAKE_BUILD_PARALLEL_LEVEL: '2'
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      # Keep this revision aligned with CMakeLists.txt. The SDK is bundled in JUCE.
+      - name: Checkout JUCE 8.0.12 and AAX SDK
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: juce-framework/JUCE
+          ref: 29396c22c93392d6738e021b83196283d6e4d850
+          path: third_party/JUCE
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+
+      - name: Test packaging checks
+        run: python -m unittest discover -s Tests -p 'test_package*.py' -v
+
+      - name: Configure
+        run: |
+          mkdir -p ci-logs
+          args=(-S . -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=Release -DFIELD_BUILD_TESTS=ON)
+          if [[ "$BUILD_PLATFORM" == windows ]]; then
+            args+=(-G "Visual Studio 17 2022" -A x64)
+          else
+            args+=(-G "Unix Makefiles" "-DCMAKE_OSX_ARCHITECTURES=$BUILD_ARCH" -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0)
+          fi
+          cmake "${args[@]}" 2>&1 | tee ci-logs/configure.log
+
+      - name: Build plugin formats and test harness
+        run: |
+          targets=(FieldEffectTests)
+          read -r -a formats <<< "$BUILD_FORMATS"
+          for format in "${formats[@]}"; do
+            targets+=("FieldEffect_$format")
+          done
+          cmake --build "$BUILD_DIR" --config Release --target "${targets[@]}" --parallel 2 2>&1 | tee ci-logs/build.log
+
+      - name: Test audio, state and editor
+        run: |
+          ctest --test-dir "$BUILD_DIR" -C Release --output-on-failure --no-tests=error --timeout 180 2>&1 | tee ci-logs/tests.log
+
+      - name: Validate architecture and package each format
+        run: |
+          read -r -a formats <<< "$BUILD_FORMATS"
+          python scripts/package-plugins.py --build-dir "$BUILD_DIR" \
+            --platform "$BUILD_PLATFORM" --arch "$BUILD_ARCH" \
+            --formats "${formats[@]}" --output-dir dist 2>&1 | tee ci-logs/package.log
+
+      - name: Build macOS installer DMG
+        if: matrix.platform == 'macos'
+        run: |
+          python scripts/package-dmg.py --arch "$BUILD_ARCH" 2>&1 | tee ci-logs/dmg.log
+
+      - name: Verify DMG and test installation and uninstallation
+        if: matrix.platform == 'macos'
+        run: |
+          images=(dist/*-Installer.dmg)
+          [[ ${#images[@]} -eq 1 && -f "${images[0]}" ]]
+          python scripts/verify-dmg.py "${images[0]}" --install-test 2>&1 | tee ci-logs/dmg-test.log
+
+      - name: Upload macOS installer DMG
+        if: matrix.platform == 'macos'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: HT-76-${{ matrix.platform }}-${{ matrix.arch }}-DMG-Release
+          path: dist/*-Installer.dmg*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
+      - name: Build Windows installer with Inno Setup 6
+        if: matrix.platform == 'windows'
+        run: |
+          python scripts/package-windows.py 2>&1 | tee ci-logs/windows-installer.log
+
+      - name: Test Windows default installation and uninstallation
+        if: matrix.platform == 'windows'
+        run: |
+          installers=(dist/*-windows-x64-Setup.exe)
+          [[ ${#installers[@]} -eq 1 && -f "${installers[0]}" ]]
+          python scripts/verify-windows-installer.py "${installers[0]}" 2>&1 | tee ci-logs/windows-installer-test.log
+
+      - name: Upload Windows installer
+        if: matrix.platform == 'windows'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: HT-76-windows-x64-Setup-Release
+          path: dist/*-windows-x64-Setup.exe*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
+      # Upload ZIPs, not raw bundles: the inner ZIP retains macOS executable permissions.
+      - name: Upload VST3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: HT-76-${{ matrix.platform }}-${{ matrix.arch }}-VST3-Release
+          path: dist/*-VST3.zip*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
+      - name: Upload AAX development build
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: HT-76-${{ matrix.platform }}-${{ matrix.arch }}-AAX-Release
+          path: dist/*-AAX.zip*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
+      - name: Upload AU
+        if: matrix.platform == 'macos'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: HT-76-${{ matrix.platform }}-${{ matrix.arch }}-AU-Release
+          path: dist/*-AU.zip*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
+      - name: Upload build and test logs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: logs-${{ matrix.platform }}-${{ matrix.arch }}
+          path: |
+            ci-logs/
+            build-ci/Testing/Temporary/*.log
+            build-ci/CMakeFiles/CMakeConfigureLog.yaml
+          if-no-files-found: warn
+          retention-days: 14
+
+  release:
+    name: Publish tagged release
+    needs: build
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Download plugin ZIPs and macOS and Windows installers
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: HT-76-*-Release
+          path: release-assets
+          merge-multiple: true
+
+      - name: Verify complete release assets
+        shell: bash
+        run: |
+          shopt -s nullglob
+          archives=(release-assets/*.zip)
+          checksums=(release-assets/*.zip.sha256)
+          images=(release-assets/*-Installer.dmg)
+          image_checksums=(release-assets/*-Installer.dmg.sha256)
+          installers=(release-assets/*-windows-x64-Setup.exe)
+          installer_checksums=(release-assets/*-windows-x64-Setup.exe.sha256)
+          if [[ ${#archives[@]} -ne 8 || ${#checksums[@]} -ne 8 ]]; then
+            echo "Expected eight plugin ZIPs and eight SHA-256 files." >&2
+            exit 1
+          fi
+          if [[ ${#images[@]} -ne 2 || ${#image_checksums[@]} -ne 2 ]]; then
+            echo "Expected two macOS installer DMGs and two SHA-256 files." >&2
+            exit 1
+          fi
+          if [[ ${#installers[@]} -ne 1 || ${#installer_checksums[@]} -ne 1 ]]; then
+            echo "Expected one Windows x64 installer EXE and one SHA-256 file." >&2
+            exit 1
+          fi
+          for arch in arm64 x86_64; do
+            arch_images=(release-assets/*-macos-$arch-Installer.dmg)
+            [[ ${#arch_images[@]} -eq 1 ]]
+          done
+          for archive in "${archives[@]}" "${images[@]}" "${installers[@]}"; do
+            test -f "$archive.sha256"
+          done
+          cd release-assets
+          sha256sum --check --strict ./*.zip.sha256 ./*.dmg.sha256 ./*.exe.sha256
+
+      - name: Create or update GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          assets=(release-assets/*.zip release-assets/*.zip.sha256 release-assets/*.dmg release-assets/*.dmg.sha256 release-assets/*.exe release-assets/*.exe.sha256)
+          if gh release view "$RELEASE_TAG" --json isDraft > /dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "${assets[@]}" --clobber
+          else
+            cat > release-notes.md <<'EOF'
+          HT-76
+
+          Windows x64: VST3 / AAX Native.
+          macOS Intel and Apple Silicon: AU / VST3 / AAX Native (separate packages).
+
+          Eight plugin ZIPs, two macOS installer DMGs and one Windows x64 setup EXE with SHA-256 checksums are attached.
+          Each DMG includes a selectable AU/VST3/AAX installer and Uninstall HT-76.command.
+          All plugin formats are selected by default and can be deselected.
+          Windows setup includes VST3/AAX, the Microsoft Visual C++ x64 runtime, and a native uninstaller.
+          Uninstall Windows plugins through Settings > Apps > Installed apps > HT-76 Plugins.
+
+          ## 安裝與簽署狀態（開發測試版）
+
+          **目前的安裝包尚未完成正式發行簽署。安裝成功不代表所有 DAW 都能載入外掛；AAX 尤其受以下限制。**
+
+          - **macOS：** 外掛只有 ad-hoc 簽章，沒有 Developer ID 身分驗證；PKG／DMG 未簽署，也未經 Apple 公證。從網路下載後，安裝程式或外掛可能被 Gatekeeper 阻擋，出現無法驗證開發者等提示。本機建置測試通過不代表下載版本能直接開啟。確認下載來源可信後，先嘗試開啟，再到「系統設定 → 隱私權與安全性」查看是否提供「強制打開」（Open Anyway）；此選項不一定適用於所有阻擋情況或受管理的電腦。[Apple 官方說明](https://support.apple.com/en-gb/102445)
+          - **Windows：** HT-76 安裝程式、解除安裝程式與外掛未做 Authenticode 簽署，可能觸發 SmartScreen，顯示未知發行者或「Windows 已保護您的電腦」。確認來源可信且系統允許時，可由「其他資訊 → 仍要執行」繼續；企業政策或 Smart App Control 可能直接阻擋，且不提供繼續選項。安裝包內的 Microsoft Visual C++ Redistributable 有 Microsoft 簽章，但該簽章不涵蓋 HT-76。[Microsoft 官方說明](https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation)
+          - **AAX／Pro Tools：** **目前 AAX 未經 Avid／PACE 簽署，正式版 Pro Tools 不會載入，即使安裝完成也無法使用。** 此版本僅供 Pro Tools Developer 測試；一般使用者可在安裝時取消 AAX。Apple 或 Windows 的一般程式碼簽章不能取代 AAX 所需簽章。[Avid 官方說明](https://learn-cdn.avid.com/AAX_SDK_2p1p1/Documentation/Doxygen/output/html/a00274.html)
+
+          SHA-256 校驗檔可用來比對下載內容是否與本 Release 提供的檔案一致，不能取代發行者身分驗證、Apple 公證或 AAX 簽章。請依系統提供的個別檔案允許方式操作，無需關閉整台電腦的安全防護。
+          EOF
+            gh release create "$RELEASE_TAG" "${assets[@]}" \
+              --verify-tag --draft --title "$RELEASE_TAG" \
+              --generate-notes --notes-file release-notes.md
+          fi
+          # Publish only after every upload succeeds; failed uploads leave a new release as a draft.
+          if [[ "$(gh release view "$RELEASE_TAG" --json isDraft --jq '.isDraft')" == true ]]; then
+            gh release edit "$RELEASE_TAG" --draft=false
+          fi

@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<JUCERPROJECT id="FE1176" name="HT-76" projectType="audioplug" version="0.9.0" bundleIdentifier="com.hikaritsai.fieldeffect1176" companyName="Field Effect" pluginName="HT-76" pluginDesc="Stereo-linked FET limiting amplifier" pluginManufacturer="Field Effect" pluginManufacturerCode="Hika" pluginCode="Fe76" pluginFormats="buildAU,buildVST3,buildStandalone,buildAAX" aaxIdentifier="com.hikaritsai.fieldeffect1176" pluginAAXCategory="2" pluginCharacteristicsValue="pluginEditorRequiresKeys" pluginVST3Category="Fx,Dynamics" pluginAUMainType="'aufx'" pluginAUExportPrefix="FieldEffect1176AU" cppLanguageStandard="17" useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" headerPath="../../Source;../../third_party/fetcomp-dsp;../../third_party/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK" defines="JUCE_MODAL_LOOPS_PERMITTED=1 JUCE_VST3_CAN_REPLACE_VST2=0" binaryDataNamespace="BinaryData">
+  <MAINGROUP id="feMain" name="HT-76">
+    <GROUP id="groupSource" name="Source">
+      <FILE id="RevHStages" name="RevHStages.h" compile="0" resource="0" file="Source/RevHStages.h" />
+      <FILE id="groupSource0" name="DspEngine.cpp" compile="1" resource="0" file="Source/DspEngine.cpp" />
+      <FILE id="groupSource1" name="DspEngine.h" compile="0" resource="0" file="Source/DspEngine.h" />
+      <FILE id="groupSource2" name="MeterBridge.h" compile="0" resource="0" file="Source/MeterBridge.h" />
+      <FILE id="groupSource3" name="PluginEditor.cpp" compile="1" resource="0" file="Source/PluginEditor.cpp" />
+      <FILE id="groupSource4" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h" />
+      <FILE id="groupSource5" name="PluginProcessor.cpp" compile="1" resource="0" file="Source/PluginProcessor.cpp" />
+      <FILE id="groupSource6" name="PluginProcessor.h" compile="0" resource="0" file="Source/PluginProcessor.h" />
+    </GROUP>
+    <GROUP id="groupFETDSP" name="FET DSP">
+      <FILE id="groupFETDSP0" name="FetLimiterDsp.h" compile="0" resource="0" file="third_party/fetcomp-dsp/FetLimiterDsp.h" />
+      <FILE id="groupFETDSP1" name="MathUtils.h" compile="0" resource="0" file="third_party/fetcomp-dsp/MathUtils.h" />
+    </GROUP>
+    <GROUP id="groupPanelassets" name="Panel assets">
+      <FILE id="groupPanelassets0" name="concept-knob-body.png" compile="0" resource="1" file="design/assets/concept-knob-body.png" />
+      <FILE id="groupPanelassets1" name="concept-metal.jpg" compile="0" resource="1" file="design/assets/concept-metal.jpg" />
+      <FILE id="groupPanelassets2" name="concept-vu-paper.jpg" compile="0" resource="1" file="design/assets/concept-vu-paper.jpg" />
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC aaxFolder="third_party/JUCE/modules/juce_audio_plugin_client/AAX/SDK" targetFolder="Builds/MacOSX" microphonePermissionNeeded="1" microphonePermissionText="Audio input is used to process live sound through the compressor." developmentTeamID="">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="HT-76" macOSDeploymentTarget="12.0" osxArchitecture="Native" enablePluginBinaryCopyStep="0" />
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="HT-76" macOSDeploymentTarget="12.0" osxArchitecture="Native" enablePluginBinaryCopyStep="0" />
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="third_party/JUCE/modules" />
+        <MODULEPATH id="juce_audio_devices" path="third_party/JUCE/modules" />
+        <MODULEPATH id="juce_audio_formats" path="third_party/JUCE/modules" />
+        <MODULEPATH id="juce_audio_plugin_client" path="third_party/JUCE/modules" />
+        <MODULEPATH id="juce_audio_processors" path="third_party/JUCE/modules" />
+        <MODULEPATH id="juce_audio_processors_headless" path="third_party/JUCE/modules" />
+        <MODULEPATH id="juce_audio_utils" path="third_party/JUCE/modules" />
+        <MODULEPATH id="juce_core" path="third_party/JUCE/modules" />
+        <MODULEPATH id="juce_data_structures" path="third_party/JUCE/modules" />
+        <MODULEPATH id="juce_dsp" path="third_party/JUCE/modules" />
+        <MODULEPATH id="juce_events" path="third_party/JUCE/modules" />
+        <MODULEPATH id="juce_graphics" path="third_party/JUCE/modules" />
+        <MODULEPATH id="juce_gui_basics" path="third_party/JUCE/modules" />
+        <MODULEPATH id="juce_gui_extra" path="third_party/JUCE/modules" />
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0" />
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="0" />
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="0" />
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0" useGlobalPath="0" />
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="0" />
+    <MODULE id="juce_audio_processors_headless" showAllCode="1" useLocalCopy="0" useGlobalPath="0" />
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="0" />
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="0" />
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="0" />
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="0" />
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="0" />
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="0" />
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0" />
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="0" />
+  </MODULES>
+  <JUCEOPTIONS JUCE_WEB_BROWSER="0" JUCE_USE_CURL="0" />
+</JUCERPROJECT>

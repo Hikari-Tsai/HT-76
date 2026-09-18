@@ -1,0 +1,72 @@
+#include "PluginProcessor.h"
+#include <iostream>
+#include <stdexcept>
+#include <cmath>
+namespace {
+void require(bool ok,const char* message){if(!ok)throw std::runtime_error(message);}
+juce::Component* find(juce::Component& c,const std::function<bool(juce::Component&)>& match)
+{
+    if(match(c))return &c;
+    for(auto* child:c.getChildren())if(auto* found=find(*child,match))return found;
+    return nullptr;
+}
+juce::Slider& slider(juce::Component& root,const char* name)
+{
+    auto* c=find(root,[&](auto& x){return x.getName()==name&&dynamic_cast<juce::Slider*>(&x)!=nullptr;});
+    require(c!=nullptr,"named native knob missing");return *dynamic_cast<juce::Slider*>(c);
+}
+void click(juce::Component& root,const char* name)
+{
+    auto* c=find(root,[&](auto& x){auto* b=dynamic_cast<juce::Button*>(&x);return b&&b->getButtonText()==name;});
+    require(c!=nullptr,"native button missing");dynamic_cast<juce::Button*>(c)->triggerClick();juce::MessageManager::getInstance()->runDispatchLoopUntil(35);
+}
+}
+int runEditorTests()
+{
+    try{
+        FieldEffectProcessor p;p.prepareToPlay(48000,800);
+        std::unique_ptr<juce::AudioProcessorEditor> e(p.createEditor());require(e!=nullptr,"editor missing");
+        require(e->getWidth()==1280&&std::abs(e->getHeight()-334)<=1,"Rack reference size changed");
+        auto& gain=slider(*e,"Input gain");gain.setValue(18,juce::sendNotificationSync);
+        require(std::abs(p.parameters.getRawParameterValue("inputDb")->load()-18)<.01f,"knob did not update APVTS");
+        auto* out=p.parameters.getParameter("outputDb");out->setValueNotifyingHost(out->convertTo0to1(-10));juce::MessageManager::getInstance()->runDispatchLoopUntil(30);
+        require(std::abs(slider(*e,"Output gain").getValue()+10)<.01,"automation did not update knob");
+        auto& atk=slider(*e,"Attack time, clockwise faster");const auto before=atk.getValue();atk.keyPressed(juce::KeyPress(juce::KeyPress::rightKey));require(atk.getValue()<before,"clockwise attack is not faster");
+        click(*e,"8");click(*e,"ALL");require(p.parameters.getRawParameterValue("allButtons")->load()>.5,"ALL did not activate");click(*e,"ALL");require(p.parameters.getRawParameterValue("ratio")->load()==1,"ALL did not preserve ratio");
+        click(*e,"REV H*");require(p.parameters.getRawParameterValue("revision")->load()==1,"Rev H button did not select audio model");
+        click(*e,"REV D");require(p.parameters.getRawParameterValue("revision")->load()==0,"Rev D button did not restore model");
+        click(*e,"DYNAMIC");require(p.editorMode.load()==1&&std::abs(e->getHeight()-508)<=1,"Dynamic reference size");require(std::abs(gain.getValue()-18)<.01,"view switch lost gain");
+        click(*e,"RACK");require(std::abs(e->getHeight()-334)<=1,"Rack switch height");
+        FieldEffectProcessor restored;restored.editorMode.store(1);restored.editorWidth.store(1440);juce::MemoryBlock state;restored.getStateInformation(state);p.setStateInformation(state.getData(),(int)state.getSize());juce::MessageManager::getInstance()->runDispatchLoopUntil(60);
+        require(e->getWidth()==1440&&std::abs(e->getHeight()-572)<=1,"open editor did not follow restored view/width");
+        juce::AudioBuffer<float> silence(2,800);juce::MidiBuffer midi;silence.clear();for(int i=0;i<10;++i)p.processBlockBypassed(silence,midi);juce::MessageManager::getInstance()->runDispatchLoopUntil(40);
+        auto* power=find(*e,[](auto& c){return c.getTitle()=="Bypass compressor";});require(power!=nullptr,"bypass control missing");require(dynamic_cast<juce::Button*>(power)->getButtonText()=="OUT","host bypass did not reach effective bypass display");
+        require(p.parameters.getRawParameterValue("bypass")->load()<.5f,"host bypass corrupted user bypass parameter");
+        std::cout<<"PASS native editor controls/automation/timing/ALL/view dimensions/state restore/host bypass\n";return 0;
+    }catch(const std::exception& e){std::cerr<<"FAIL native editor: "<<e.what()<<'\n';return 1;}
+}
+int renderEditors(const juce::File& directory)
+{
+    require(directory.createDirectory().wasOk(),"cannot create render directory");
+    for(int revision=0;revision<2;++revision)
+    for(int mode=0;mode<2;++mode){
+        FieldEffectProcessor p;p.editorMode.store(mode);
+        auto* revisionParameter=p.parameters.getParameter("revision");
+        revisionParameter->setValueNotifyingHost(revisionParameter->convertTo0to1((float)revision));
+        p.prepareToPlay(48000,800);
+        std::unique_ptr<juce::AudioProcessorEditor> e(p.createEditor());
+        juce::AudioBuffer<float> audio(2,800);juce::MidiBuffer midi;
+        for(int frame=0;frame<720;++frame){
+            for(int i=0;i<800;++i){const double t=(frame*800+i)/48000.0;
+                const float envelope=(float)(.015+.22*std::exp(-std::fmod(t,.52)/.085)+.09*std::exp(-std::fmod(t+.26,1.04)/.14));
+                const float sample=envelope*(float)(std::sin(t*juce::MathConstants<double>::twoPi*96)+.3*std::sin(t*juce::MathConstants<double>::twoPi*740));
+                audio.setSample(0,i,sample);audio.setSample(1,i,sample*.83f);}
+            p.processBlock(audio,midi);
+            if(frame%2==0)juce::MessageManager::getInstance()->runDispatchLoopUntil(18);
+        }
+        juce::MessageManager::getInstance()->runDispatchLoopUntil(25);
+        const auto image=e->createComponentSnapshot(e->getLocalBounds(),true,1.5f);
+        auto file=directory.getChildFile(revision ? (mode?"dynamic-revh.png":"rack-revh.png") : (mode?"dynamic-native.png":"rack-native.png"));file.deleteFile();auto stream=file.createOutputStream();require(stream!=nullptr,"cannot write native snapshot");juce::PNGImageFormat png;require(png.writeImageToStream(image,*stream),"PNG failed");std::cout<<file.getFullPathName()<<'\n';
+    }
+    return 0;
+}
