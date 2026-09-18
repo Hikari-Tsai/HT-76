@@ -169,7 +169,7 @@ jobs:
       - name: Archive Universal test harness for Intel verification
         if: matrix.platform == 'macos'
         run: |
-          lipo -verify_arch arm64 x86_64 "$BUILD_DIR/FieldEffectTests_artefacts/Release/FieldEffectTests"
+          lipo "$BUILD_DIR/FieldEffectTests_artefacts/Release/FieldEffectTests" -verify_arch arm64 x86_64
           tar -czf ci-logs/macos-universal-tests.tar.gz -C "$BUILD_DIR/FieldEffectTests_artefacts/Release" FieldEffectTests
 
       - name: Upload Universal test harness
@@ -223,7 +223,7 @@ jobs:
           mkdir -p ci-logs
           [[ "$(uname -m)" == x86_64 ]]
           tar -xzf ci-tests/macos-universal-tests.tar.gz -C ci-tests
-          lipo -verify_arch arm64 x86_64 ci-tests/FieldEffectTests
+          lipo ci-tests/FieldEffectTests -verify_arch arm64 x86_64
           ci-tests/FieldEffectTests 2>&1 | tee ci-logs/intel-tests.log
           images=(dist/*-Installer.dmg)
           [[ ${#images[@]} -eq 1 && -f "${images[0]}" ]]
