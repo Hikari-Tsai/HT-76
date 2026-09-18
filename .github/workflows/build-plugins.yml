@@ -238,6 +238,10 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           assets=(release-assets/*.zip release-assets/*.zip.sha256 release-assets/*.dmg release-assets/*.dmg.sha256 release-assets/*.exe release-assets/*.exe.sha256)
+          release_flags=()
+          if [[ "$RELEASE_TAG" == 'v0.91' ]]; then
+            release_flags=(--prerelease --latest=false)
+          fi
           if gh release view "$RELEASE_TAG" --json isDraft > /dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" "${assets[@]}" --clobber
           else
@@ -265,9 +269,13 @@ jobs:
           EOF
             gh release create "$RELEASE_TAG" "${assets[@]}" \
               --verify-tag --draft --title "$RELEASE_TAG" \
-              --generate-notes --notes-file release-notes.md
+              --generate-notes --notes-file release-notes.md "${release_flags[@]}"
+          fi
+          # Apply pre-release status to existing drafts/reruns as well.
+          if [[ ${#release_flags[@]} -gt 0 ]]; then
+            gh release edit "$RELEASE_TAG" "${release_flags[@]}"
           fi
           # Publish only after every upload succeeds; failed uploads leave a new release as a draft.
           if [[ "$(gh release view "$RELEASE_TAG" --json isDraft --jq '.isDraft')" == true ]]; then
-            gh release edit "$RELEASE_TAG" --draft=false
+            gh release edit "$RELEASE_TAG" --draft=false "${release_flags[@]}"
           fi

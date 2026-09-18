@@ -237,9 +237,11 @@ git clone --branch 8.0.12 --depth 1 https://github.com/juce-framework/JUCE.git t
 新建 Release 的說明會自動附上 macOS Gatekeeper／簽署與公證狀態、Windows SmartScreen／未知發行者提示，以及未簽署 AAX 無法在正式版 Pro Tools 載入的限制，並提供各平台的官方說明連結。
 
 ```sh
-git tag -a v0.9 -m "HT-76 v0.9"
-git push origin v0.9
+git tag -a v0.91 -m "HT-76 v0.91 pre-release"
+git push origin v0.91
 ```
+
+`v0.91` 對應外掛版本 `0.9.1`，此次發行標示為 **Pre-release**，不設為 Latest。所有平台建置、測試與打包成功後才會公開發行。
 
 發佈工作驗證八份 ZIP、兩份 DMG、一份 Windows EXE 與各自的 SHA-256 檔案，先建立草稿，全部上傳完成才公開。重新執行會沿用同名 Release 並更新同名附件；immutable releases 啟用後無法覆寫已公開附件。一般分支、PR、手動執行和非 `v` 開頭 tag 只產生 Actions artifacts。
 
@@ -252,7 +254,7 @@ git push origin v0.9
 ```sh
 python3 scripts/package-plugins.py --build-dir build --platform macos --arch arm64 --formats AU VST3 AAX --output-dir dist
 python3 scripts/package-dmg.py --arch arm64 --archive-dir dist --output-dir dist
-python3 scripts/verify-dmg.py dist/HT-76-0.9.0-local-macos-arm64-Installer.dmg
+python3 scripts/verify-dmg.py dist/HT-76-0.9.1-local-macos-arm64-Installer.dmg
 ```
 
 DMG 工具使用 macOS 內建的 `pkgbuild`、`productbuild` 與 `hdiutil`。需先產生同一版本、架構及 revision 的 AU／VST3／AAX ZIP。`verify-dmg.py` 預設只掛載、展開與檢查安裝包；上述檔名應依實際版本調整。macOS CI 另在全新的 GitHub-hosted runner 上實際安裝三種格式、核對外掛與 receipts，再執行解除安裝及重複執行檢查。
