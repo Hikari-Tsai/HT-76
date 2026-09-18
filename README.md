@@ -1,12 +1,13 @@
 # HT-76
 
-專案原創部分採用 [Apache License 2.0](LICENSE)。第三方元件保留各自授權。
+![Rev D 黑色 Rack 原生 JUCE 介面](docs/images/rack.png)
+![Rev D 黑色 Dynamic 原生 JUCE 介面](docs/images/dynamic.png)
 
-**以 JUCE 開發的 1176 風格 FET 壓縮器，結合復古 Rack 面板與即時動態分析介面。**
+**以JUCE框架所開發的1176風格FET壓縮器，結合經典機架面板與現代化的即時動態分析兩種介面。**
 
-HT-76 保留 Input、Output、Attack、Release、Ratio 與 ALL 的操作方式，讓輸入推動量、壓縮反應與輸出音量可以直接在面板上調整。兩種介面共用同一組參數，音量表與歷史曲線皆來自實際處理的音訊。可切換 **[Rev D](docs/REV_D_MODEL.md)／[Rev H（實驗性）](docs/REV_H_MODEL.md)**；預設 Rev D，舊版 DAW 專案也會還原為 Rev D。
+除此之外，並提供了黑色以及白色兩種經典1176的DSP演算法可供選擇
 
-DSP 核心採用 **Paul Ulrix 的 [fetcomp-dsp](https://github.com/Paulllux/fetcomp-dsp)**。本專案在此基礎上完成 JUCE 外掛、雙模式面板、參數自動化、計量、旁通處理，以及跨平台建置與打包。
+
 
 **開始使用：** [下載外掛](https://github.com/Hikari-Tsai/HT-76/releases) · [安裝教學](#平台下載與安裝) · [在 DAW 載入](#在-daw-中掃描與載入) · [安裝問題排查](#安裝問題排查)
 
