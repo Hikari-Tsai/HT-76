@@ -300,7 +300,7 @@ jobs:
         run: |
           assets=(release-assets/*.zip release-assets/*.dmg release-assets/*.exe)
           release_flags=()
-          if [[ "$RELEASE_TAG" == 'v0.91' ]]; then
+          if [[ "$RELEASE_TAG" == 'v0.91' || "$RELEASE_TAG" == 'v0.92' ]]; then
             release_flags=(--prerelease --latest=false)
           fi
           if gh release view "$RELEASE_TAG" --json isDraft > /dev/null 2>&1; then
