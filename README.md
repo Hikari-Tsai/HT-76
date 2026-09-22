@@ -3,8 +3,8 @@
 
 # HT-76
 
-![Rev D 黑色 Rack 原生 JUCE 介面](docs/images/rack.png)
-![Rev D 黑色 Dynamic 原生 JUCE 介面](docs/images/dynamic.png)
+![Rev D 黑色 Rack 動態預覽](docs/images/rack-revd.gif)
+![Rev D 黑色 Dynamic 動態預覽](docs/images/dynamic-revd.gif)
 
 **以JUCE框架所開發的1176風格FET壓縮器，結合經典機架面板與現代化的即時動態分析兩種介面。**
 

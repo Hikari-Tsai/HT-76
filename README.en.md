@@ -3,8 +3,8 @@
 
 # HT-76
 
-![Rev D black Rack interface in native JUCE](docs/images/rack.png)
-![Rev D black Dynamic interface in native JUCE](docs/images/dynamic.png)
+![Animated Rev D black Rack preview](docs/images/rack-revd.gif)
+![Animated Rev D black Dynamic preview](docs/images/dynamic-revd.gif)
 
 **A JUCE-based, 1176-style FET compressor combining a classic rack panel with a modern, real-time dynamics display.**
 

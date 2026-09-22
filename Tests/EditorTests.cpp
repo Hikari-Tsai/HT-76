@@ -76,28 +76,44 @@ int runEditorTests()
         std::cout<<"PASS native editor controls/automation/timing/ALL/view dimensions/state restore/host bypass\n";return 0;
     }catch(const std::exception& e){std::cerr<<"FAIL native editor: "<<e.what()<<'\n';return 1;}
 }
-int renderEditors(const juce::File& directory)
+int renderEditors(const juce::File& directory,bool animation)
 {
     require(directory.createDirectory().wasOk(),"cannot create render directory");
-    for(int revision=0;revision<2;++revision)
+    for(int revision=0;revision<(animation?1:2);++revision)
     for(int mode=0;mode<2;++mode){
         FieldEffectProcessor p;p.editorMode.store(mode);
         auto* revisionParameter=p.parameters.getParameter("revision");
         revisionParameter->setValueNotifyingHost(revisionParameter->convertTo0to1((float)revision));
         p.prepareToPlay(48000,800);
         std::unique_ptr<juce::AudioProcessorEditor> e(p.createEditor());
+        const auto frames=directory.getChildFile(mode?"dynamic-revd":"rack-revd");
+        if(animation)require(frames.createDirectory().wasOk(),"cannot create animation directory");
+        const auto snapshot=[&](const juce::File& file,float scale){
+            const auto image=e->createComponentSnapshot(e->getLocalBounds(),true,scale);
+            file.deleteFile();auto stream=file.createOutputStream();require(stream!=nullptr,"cannot write native snapshot");
+            juce::PNGImageFormat png;require(png.writeImageToStream(image,*stream),"PNG failed");
+        };
         juce::AudioBuffer<float> audio(2,800);juce::MidiBuffer midi;
-        for(int frame=0;frame<720;++frame){
+        // Fill the 12-second history first, then capture 8 seconds at 20 fps.
+        // The audio clock supplies 60 meter frames per second in both modes.
+        for(int frame=0;frame<(animation?1200:720);++frame){
             for(int i=0;i<800;++i){const double t=(frame*800+i)/48000.0;
                 const float envelope=(float)(.015+.22*std::exp(-std::fmod(t,.52)/.085)+.09*std::exp(-std::fmod(t+.26,1.04)/.14));
                 const float sample=envelope*(float)(std::sin(t*juce::MathConstants<double>::twoPi*96)+.3*std::sin(t*juce::MathConstants<double>::twoPi*740));
                 audio.setSample(0,i,sample);audio.setSample(1,i,sample*.83f);}
             p.processBlock(audio,midi);
-            if(frame%2==0)juce::MessageManager::getInstance()->runDispatchLoopUntil(18);
+            if(animation)
+            {
+                // Allow the native timer to update the meters and VU ballistics.
+                juce::MessageManager::getInstance()->runDispatchLoopUntil(17);
+                if(frame>=720&&(frame-720)%3==2)
+                    snapshot(frames.getChildFile("frame-"+juce::String((frame-720)/3).paddedLeft('0',4)+".png"),1.0f);
+            }
+            else if(frame%2==0)juce::MessageManager::getInstance()->runDispatchLoopUntil(18);
         }
+        if(animation){std::cout<<frames.getFullPathName()<<" (160 frames at 20 fps)"<<std::endl;continue;}
         juce::MessageManager::getInstance()->runDispatchLoopUntil(25);
-        const auto image=e->createComponentSnapshot(e->getLocalBounds(),true,1.5f);
-        auto file=directory.getChildFile(revision ? (mode?"dynamic-revh.png":"rack-revh.png") : (mode?"dynamic-native.png":"rack-native.png"));file.deleteFile();auto stream=file.createOutputStream();require(stream!=nullptr,"cannot write native snapshot");juce::PNGImageFormat png;require(png.writeImageToStream(image,*stream),"PNG failed");std::cout<<file.getFullPathName()<<'\n';
+        auto file=directory.getChildFile(revision ? (mode?"dynamic-revh.png":"rack-revh.png") : (mode?"dynamic-native.png":"rack-native.png"));snapshot(file,1.5f);std::cout<<file.getFullPathName()<<'\n';
     }
     return 0;
 }
