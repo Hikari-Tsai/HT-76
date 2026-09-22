@@ -1,5 +1,4 @@
-[![繁體中文](https://img.shields.io/badge/%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87-62B6A5?style=for-the-badge)](README.md) &emsp;&emsp;
-[![English](https://img.shields.io/badge/English-454B50?style=for-the-badge)](README.en.md)
+[![繁體中文](https://img.shields.io/badge/%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87-62B6A5?style=for-the-badge)](README.md)[![English](https://img.shields.io/badge/English-454B50?style=for-the-badge)](README.en.md)
 
 # HT-76
 
