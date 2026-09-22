@@ -11,18 +11,20 @@ Choose between two classic 1176-inspired DSP models: Rev D with a black panel an
 
 ## Download and installation
 
-[![Download HT-76](https://img.shields.io/badge/DOWNLOAD-HT--76-62B6A5?style=for-the-badge&logo=github&logoColor=E7DFC9&labelColor=252729)](https://github.com/Hikari-Tsai/HT-76/releases) &emsp;&emsp;
-[![Full installation guide](https://img.shields.io/badge/GUIDE-INSTALLATION-D5B779?style=for-the-badge&labelColor=252729)](docs/INSTALLATION.en.md) &emsp;&emsp;
-[![Report an issue](https://img.shields.io/badge/SUPPORT-ISSUES-9CA5A8?style=for-the-badge&labelColor=252729)](https://github.com/Hikari-Tsai/HT-76/issues)
+[![AAX](https://img.shields.io/badge/AAX-3B6962?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdERkM5IiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBkPSJNMTIgM3YxMm0tNS01IDUgNSA1LTVNNCAxNnY1aDE2di01Ii8%2BPC9zdmc%2B&logoColor=E7DFC9)](#plugin-downloads)[![AU](https://img.shields.io/badge/AU-3B6962?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdERkM5IiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBkPSJNMTIgM3YxMm0tNS01IDUgNSA1LTVNNCAxNnY1aDE2di01Ii8%2BPC9zdmc%2B&logoColor=E7DFC9)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-AU.zip)[![VST3](https://img.shields.io/badge/VST3-3B6962?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdERkM5IiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBkPSJNMTIgM3YxMm0tNS01IDUgNSA1LTVNNCAxNnY1aDE2di01Ii8%2BPC9zdmc%2B&logoColor=E7DFC9)](#plugin-downloads)[![DMG](https://img.shields.io/badge/DMG-8A7047?style=for-the-badge&logo=apple&logoColor=E7DFC9)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-Installer.dmg)[![EXE](https://img.shields.io/badge/EXE-505C65?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI0U3REZDOSIgZD0iTTIgMmg5djlIMnptMTEgMGg5djloLTl6TTIgMTNoOXY5SDJ6bTExIDBoOXY5aC05eiIvPjwvc3ZnPg%3D%3D&logoColor=E7DFC9)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-windows-x64-Setup.exe)
+
+Choose your platform below for AAX/VST3; the AU, DMG, and EXE buttons download **v0.93** directly.
 
 1. **Download:** Expand **Assets** on the Releases page and choose the installer for your platform below. Releases marked Pre-release are test versions; Source code archives contain source files.
 2. **Install:** Close your DAW, run the installer, and select the formats you need. All formats are selected by default; deselect any you do not need.
 3. **Load:** Reopen your DAW, scan for plug-ins, and search for **HT-76** under audio effects (manufacturer: **Field Effect**). Use AU in Logic Pro, or VST3 in a DAW that supports it.
 
+<a id="plugin-downloads"></a>
+
 | Platform | Download and install | Formats |
 | --- | --- | --- |
-| macOS 12+ · Universal for Intel and Apple Silicon | Open `*-macos-universal-Installer.dmg`, then run `Install HT-76.pkg` | AU, VST3, AAX |
-| Windows x64 | Run `*-windows-x64-Setup.exe`; includes the Visual C++ runtime | VST3, AAX |
+| macOS 12+ · Universal for Intel and Apple Silicon | Open `*-macos-universal-Installer.dmg`, then run `Install HT-76.pkg` | [AU](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-AU.zip), [VST3](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-VST3.zip), [AAX](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-AAX.zip) |
+| Windows x64 | Run `*-windows-x64-Setup.exe`; includes the Visual C++ runtime | [VST3](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-windows-x64-VST3.zip), [AAX](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-windows-x64-AAX.zip) |
 
 **These are test builds without production signing.** If your system blocks installation, see [troubleshooting](docs/INSTALLATION.en.md#troubleshooting). AAX is not signed by Avid/PACE and is intended only for Pro Tools Developer testing; retail Pro Tools cannot load it. Most users can deselect AAX.
 

@@ -11,18 +11,20 @@
 
 ## 下載與安裝
 
-[![下載 HT-76](https://img.shields.io/badge/DOWNLOAD-HT--76-62B6A5?style=for-the-badge&logo=github&logoColor=E7DFC9&labelColor=252729)](https://github.com/Hikari-Tsai/HT-76/releases) &emsp;&emsp;
-[![完整安裝指南](https://img.shields.io/badge/GUIDE-INSTALLATION-D5B779?style=for-the-badge&labelColor=252729)](docs/INSTALLATION.md) &emsp;&emsp;
-[![問題回報](https://img.shields.io/badge/SUPPORT-ISSUES-9CA5A8?style=for-the-badge&labelColor=252729)](https://github.com/Hikari-Tsai/HT-76/issues)
+[![AAX](https://img.shields.io/badge/AAX-3B6962?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdERkM5IiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBkPSJNMTIgM3YxMm0tNS01IDUgNSA1LTVNNCAxNnY1aDE2di01Ii8%2BPC9zdmc%2B&logoColor=E7DFC9)](#plugin-downloads)[![AU](https://img.shields.io/badge/AU-3B6962?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdERkM5IiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBkPSJNMTIgM3YxMm0tNS01IDUgNSA1LTVNNCAxNnY1aDE2di01Ii8%2BPC9zdmc%2B&logoColor=E7DFC9)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-AU.zip)[![VST3](https://img.shields.io/badge/VST3-3B6962?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdERkM5IiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBkPSJNMTIgM3YxMm0tNS01IDUgNSA1LTVNNCAxNnY1aDE2di01Ii8%2BPC9zdmc%2B&logoColor=E7DFC9)](#plugin-downloads)[![DMG](https://img.shields.io/badge/DMG-8A7047?style=for-the-badge&logo=apple&logoColor=E7DFC9)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-Installer.dmg)[![EXE](https://img.shields.io/badge/EXE-505C65?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI0U3REZDOSIgZD0iTTIgMmg5djlIMnptMTEgMGg5djloLTl6TTIgMTNoOXY5SDJ6bTExIDBoOXY5aC05eiIvPjwvc3ZnPg%3D%3D&logoColor=E7DFC9)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-windows-x64-Setup.exe)
+
+AAX／VST3 請在下表選擇平台；AU、DMG、EXE 按鈕直接下載 **v0.93**。
 
 1. **下載：** 在 Releases 展開 **Assets**，依平台選擇下表的安裝檔。標示 Pre-release 的版本為測試版；Source code 是原始碼。
 2. **安裝：** 關閉 DAW，執行安裝程式並選擇格式。所有格式預設勾選，可取消不需要的項目。
 3. **載入：** 重新開啟 DAW 並掃描外掛，在音訊效果器中搜尋 **HT-76**（廠商 **Field Effect**）。Logic Pro 選 AU，支援 VST3 的 DAW 選 VST3。
 
+<a id="plugin-downloads"></a>
+
 | 平台 | 下載與安裝 | 格式 |
 | --- | --- | --- |
-| macOS 12+ · Intel／Apple Silicon 通用 | 開啟 `*-macos-universal-Installer.dmg` → 執行 `Install HT-76.pkg` | AU、VST3、AAX |
-| Windows x64 | 執行 `*-windows-x64-Setup.exe`，內含 Visual C++ 執行環境 | VST3、AAX |
+| macOS 12+ · Intel／Apple Silicon 通用 | 開啟 `*-macos-universal-Installer.dmg` → 執行 `Install HT-76.pkg` | [AU](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-AU.zip)、[VST3](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-VST3.zip)、[AAX](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-AAX.zip) |
+| Windows x64 | 執行 `*-windows-x64-Setup.exe`，內含 Visual C++ 執行環境 | [VST3](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-windows-x64-VST3.zip)、[AAX](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-windows-x64-AAX.zip) |
 
 **目前為未正式簽署的測試版。** 系統若阻擋安裝，請參考[安裝問題排查](docs/INSTALLATION.md#安裝問題排查)。AAX 未經 Avid／PACE 簽署，僅供 Pro Tools Developer 測試，正式版 Pro Tools 無法載入；一般使用者可取消 AAX。
 
