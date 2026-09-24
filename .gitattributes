@@ -1,0 +1,6 @@
+# Browser-based panel studies are design references, not plugin source.
+# Exclude them from GitHub's language statistics without affecting builds.
+design/*.html linguist-detectable=false
+design/*.css linguist-detectable=false
+design/verify-reference.cjs linguist-detectable=false
+design/build-preview.py linguist-detectable=false
