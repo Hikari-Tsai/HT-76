@@ -18,7 +18,7 @@ dmg = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(dmg)
 
 
-def verify(image, install_test=False):
+def verify(image, install_test=False, wraptool=None):
     image = image.resolve()
     if install_test and (os.environ.get('GITHUB_ACTIONS') != 'true'
                          or os.environ.get('RUNNER_ENVIRONMENT') != 'github-hosted'):
@@ -63,6 +63,8 @@ def verify(image, install_test=False):
                     raise ValueError(f'Wrong bundle identity for {fmt}')
                 dmg.packager.validate_binary(dmg.packager.executable_path(bundle, 'macos', fmt), 'macos', arch)
                 dmg.run('/usr/bin/codesign', '--verify', '--all-architectures', '--deep', '--strict', bundle)
+                if fmt == 'AAX' and metadata.get('pace_signed') is True:
+                    dmg.verify_pace(bundle, wraptool)
             dmg.run('/usr/sbin/installer', '-showChoicesXML', '-pkg', installer, '-target', '/')
             if install_test:
                 # Never replace an existing installation even on the disposable CI runner.
@@ -99,5 +101,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('image', type=Path)
     parser.add_argument('--install-test', action='store_true')
+    parser.add_argument('--wraptool', help='PACE tool for verifying signed AAX (or set PACE_WRAPTOOL)')
     args = parser.parse_args()
-    verify(args.image, args.install_test)
+    verify(args.image, args.install_test, args.wraptool)

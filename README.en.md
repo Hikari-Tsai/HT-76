@@ -11,12 +11,12 @@ Choose between two classic 1176-inspired DSP models: Rev D with a black panel an
 
 ## Download and installation
 
-[![AAX](https://img.shields.io/badge/AAX-662D91?style=for-the-badge&logo=protools&logoColor=FFFFFF)](#plugin-downloads)[![AU](https://img.shields.io/badge/AU-D1D1D6?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMUQxRDFGIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBkPSJNMyAxMHY0bTQtN3YxMG01LTE0djE4bTUtMTR2MTBtNC03djQiLz48L3N2Zz4%3D)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-AU.zip)[![VST3](https://img.shields.io/badge/VST3-C90526?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ijk3MCAwIDQyMCA1MDAiPjxwYXRoIGZpbGw9IiNGRkZGRkYiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTEyMjAuMSw3LjFsODAuMiw4MC4yYy04Mi4yLDUuNi0xNDcuMSw3NC4xLTE0Ny4xLDE1Ny43YzAsODcuMSw3MC4zLDE1Ny43LDE1Ny4zLDE1OC4xbC05MC4zLDkwLjNMOTc3LDI1MC4zIEwxMjIwLjEsNy4xTDEyMjAuMSw3LjF6IE0xMjQ0LjEsMjQ1LjFjMC0zNy4xLDMwLjEtNjcuMiw2Ny4yLTY3LjJjMzcuMSwwLDY3LjIsMzAuMSw2Ny4yLDY3LjJjMCwzNy4xLTMwLjEsNjcuMi02Ny4yLDY3LjIgQzEyNzQuMSwzMTIuMiwxMjQ0LjEsMjgyLjIsMTI0NC4xLDI0NS4xTDEyNDQuMSwyNDUuMXoiLz48L3N2Zz4%3D&logoColor=FFFFFF)](#plugin-downloads)[![DMG](https://img.shields.io/badge/DMG-000000?style=for-the-badge&logo=apple&logoColor=FFFFFF)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-Installer.dmg)[![EXE](https://img.shields.io/badge/EXE-0078D4?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTIgMmg5djlIMnptMTEgMGg5djloLTl6TTIgMTNoOXY5SDJ6bTExIDBoOXY5aC05eiIvPjwvc3ZnPg%3D%3D&logoColor=FFFFFF)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-windows-x64-Setup.exe)
+[![AAX](https://img.shields.io/badge/AAX-662D91?style=for-the-badge&logo=protools&logoColor=FFFFFF)](#plugin-downloads)[![AU](https://img.shields.io/badge/AU-D1D1D6?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMUQxRDFGIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBkPSJNMyAxMHY0bTQtN3YxMG01LTE0djE4bTUtMTR2MTBtNC03djQiLz48L3N2Zz4%3D)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-AU.zip)[![VST3](https://img.shields.io/badge/VST3-C90526?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ijk3MCAwIDQyMCA1MDAiPjxwYXRoIGZpbGw9IiNGRkZGRkYiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTEyMjAuMSw3LjFsODAuMiw4MC4yYy04Mi4yLDUuNi0xNDcuMSw3NC4xLTE0Ny4xLDE1Ny43YzAsODcuMSw3MC4zLDE1Ny43LDE1Ny4zLDE1OC4xbC05MC4zLDkwLjNMOTc3LDI1MC4zIEwxMjIwLjEsNy4xTDEyMjAuMSw3LjF6IE0xMjQ0LjEsMjQ1LjFjMC0zNy4xLDMwLjEtNjcuMiw2Ny4yLTY3LjJjMzcuMSwwLDY3LjIsMzAuMSw2Ny4yLDY3LjJjMCwzNy4xLTMwLjEsNjcuMi02Ny4yLDY3LjIgQzEyNzQuMSwzMTIuMiwxMjQ0LjEsMjgyLjIsMTI0NC4xLDI0NS4xTDEyNDQuMSwyNDUuMXoiLz48L3N2Zz4%3D&logoColor=FFFFFF)](#plugin-downloads)[![DMG](https://img.shields.io/badge/DMG-000000?style=for-the-badge&logo=apple&logoColor=FFFFFF)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-Installer.dmg)
 
-Choose your platform below for AAX/VST3; the AU, DMG, and EXE buttons download **v0.93** directly.
+Choose downloads below; the AU and DMG buttons download **v0.93** directly. The unsigned Windows AAX ZIP and setup EXE have been removed; Windows currently provides VST3 ZIP only.
 
 1. **Download:** Expand **Assets** on the Releases page and choose the installer for your platform below. Releases marked Pre-release are test versions; Source code archives contain source files.
-2. **Install:** Close your DAW, run the installer, and select the formats you need. All formats are selected by default; deselect any you do not need.
+2. **Install:** Close your DAW. On macOS, run the installer inside the DMG; all formats are selected by default. On Windows, install VST3 manually as shown below.
 3. **Load:** Reopen your DAW, scan for plug-ins, and search for **HT-76** under audio effects (manufacturer: **Field Effect**). Use AU in Logic Pro, or VST3 in a DAW that supports it.
 
 <a id="plugin-downloads"></a>
@@ -24,13 +24,15 @@ Choose your platform below for AAX/VST3; the AU, DMG, and EXE buttons download *
 | Platform | Download and install | Formats |
 | --- | --- | --- |
 | macOS 12+ · Universal for Intel and Apple Silicon | Open `*-macos-universal-Installer.dmg`, then run `Install HT-76.pkg` | [AU](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-AU.zip), [VST3](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-VST3.zip), [AAX](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-AAX.zip) |
-| Windows x64 | Run `*-windows-x64-Setup.exe`; includes the Visual C++ runtime | [VST3](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-windows-x64-VST3.zip), [AAX](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-windows-x64-AAX.zip) |
+| Windows x64 | Extract the ZIP; copy the complete `HT-76.vst3` bundle to `C:\Program Files\Common Files\VST3` | [VST3](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-windows-x64-VST3.zip) |
 
-**These are test builds without production signing.** If your system blocks installation, see [troubleshooting](docs/INSTALLATION.en.md#troubleshooting). AAX is not signed by Avid/PACE and is intended only for Pro Tools Developer testing; retail Pro Tools cannot load it. Most users can deselect AAX.
+**These are test builds without completed production signing.** The updated v0.93 macOS AAX ZIP/DMG contains a verified PACE signature using a local self-signed test certificate; it is not notarized and Pro Tools loading has not been tested. The unsigned Windows AAX ZIP and setup EXE have been removed. If installation is blocked, see [troubleshooting](docs/INSTALLATION.en.md#troubleshooting). Check the [release notes](https://github.com/Hikari-Tsai/HT-76/releases/tag/v0.93) for each asset's signing status.
 
-**Uninstall:** On macOS, run `Uninstall HT-76.command` from the DMG and enter `UNINSTALL` when prompted. On Windows, uninstall **HT-76 Plugins** from Settings → Apps. Close your DAW first.
+**Uninstall:** On macOS, run `Uninstall HT-76.command` from the DMG and enter `UNINSTALL` when prompted. On Windows, remove the manually installed `HT-76.vst3`; for a previous EXE installation, uninstall **HT-76 Plugins** from Settings → Apps. Close your DAW first.
 
 See the [full installation guide](docs/INSTALLATION.en.md) for manual ZIP installation, plug-in locations, and DAW scanning instructions.
+
+**Developer guide:** [Local AAX signing and release upload (Chinese)](docs/LOCAL_AAX_SIGNING.md) — macOS script, initial setup, environment variables, and backups.
 
 ## Interface preview
 
@@ -220,6 +222,8 @@ python scripts/package-windows.py --archive-dir dist --output-dir dist
 ```
 
 For tools outside their default locations, pass `--iscc <path to ISCC.exe>` and `--vc-redist <path to vc_redist.x64.exe>`. Windows CI tests the default all-formats installation, reinstallation, VST3-only installation, uninstallation, and preservation of user files on a fresh GitHub-hosted runner. Tests that modify system installation directories are restricted to GitHub-hosted runners.
+
+For local macOS AAX signing, run `./scripts/sign-release-aax.sh --tag v0.93 --upload` to download, PACE-sign, verify, and replace the release ZIP. Omit `--upload` to keep the result local. See the [local AAX signing guide (Chinese)](docs/LOCAL_AAX_SIGNING.md) for setup and test-certificate limitations. Credentials and logs stay outside version control; Windows and installers require separate handling.
 
 ## Tests and current validation scope
 

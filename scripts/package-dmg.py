@@ -23,6 +23,7 @@ FORMATS = {
     'AAX': ('aaxplugin', '/Library/Application Support/Avid/Audio/Plug-Ins'),
 }
 BUNDLE_ID = 'com.hikaritsai.fieldeffect1176'
+DEFAULT_WRAPTOOL = '/Applications/PACEAntiPiracy/Eden/Fusion/Versions/6/bin/wraptool'
 spec = importlib.util.spec_from_file_location('plugin_packager', PROJECT / 'scripts/package-plugins.py')
 packager = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(packager)
@@ -38,7 +39,14 @@ def host_architectures(arch):
     return ','.join(packager.MACOS_ARCHITECTURES[arch])
 
 
-def distribution(version, arch):
+def verify_pace(bundle, wraptool=None):
+    tool = wraptool or os.environ.get('PACE_WRAPTOOL', DEFAULT_WRAPTOOL)
+    if not shutil.which(str(tool)):
+        raise ValueError('PACE-signed AAX requires wraptool verification; set PACE_WRAPTOOL or --wraptool.')
+    run(tool, 'verify', '--in', bundle)
+
+
+def distribution(version, arch, pace_signed=False):
     root = ET.Element('installer-gui-script', minSpecVersion='2')
     ET.SubElement(root, 'title').text = f'HT-76 {version} ({arch})'
     ET.SubElement(root, 'options', customize='always', hostArchitectures=host_architectures(arch), **{'require-scripts': 'false'})
@@ -49,10 +57,12 @@ def distribution(version, arch):
     outline = ET.SubElement(root, 'choices-outline')
     for fmt in FORMATS:
         ET.SubElement(outline, 'line', choice=fmt)
-        title = fmt if fmt != 'AAX' else 'AAX Native — Pro Tools Developer only'
+        title = fmt if fmt != 'AAX' else ('AAX Native — PACE signed' if pace_signed
+                                          else 'AAX Native — Pro Tools Developer only')
         description = f'Install HT-76 {fmt} to {FORMATS[fmt][1]}.'
         if fmt == 'AAX':
-            description += ' No Avid/PACE signing; not ready for retail Pro Tools.'
+            description += (' PACE signature verified. Pro Tools loading has not been tested.'
+                            if pace_signed else ' No Avid/PACE signing; not ready for retail Pro Tools.')
         choice = ET.SubElement(root, 'choice', id=fmt, title=title, description=description,
                                start_selected='true')
         identifier = f'com.hikaritsai.ht76.pkg.{fmt.lower()}'
@@ -79,9 +89,10 @@ def read_archive(archive, fmt, arch, version, revision):
     recorded = archive.with_suffix('.zip.sha256').read_text().split()
     if recorded != [hashlib.sha256(archive.read_bytes()).hexdigest(), archive.name]:
         raise ValueError(f'Checksum mismatch: {archive}')
+    return metadata
 
 
-def package(archive_dir, output_dir, arch, revision):
+def package(archive_dir, output_dir, arch, revision, wraptool=None):
     if sys.platform != 'darwin':
         raise ValueError('DMG packaging requires macOS.')
     if arch not in packager.MACOS_ARCHITECTURES or not re.fullmatch(r'[a-fA-F0-9]{7,40}|local', revision):
@@ -89,8 +100,9 @@ def package(archive_dir, output_dir, arch, revision):
     version = re.search(r'project\(HT-76\s+VERSION\s+(\d+\.\d+\.\d+)', (PROJECT / 'CMakeLists.txt').read_text()).group(1)
     label = f'HT-76-{version}-{revision[:12]}-macos-{arch}'
     archives = {fmt: archive_dir / f'{label}-{fmt}.zip' for fmt in FORMATS}
-    for fmt, archive in archives.items():
-        read_archive(archive, fmt, arch, version, revision)
+    archive_metadata = {fmt: read_archive(archive, fmt, arch, version, revision)
+                        for fmt, archive in archives.items()}
+    pace_signed = archive_metadata['AAX'].get('pace_signed') is True
     output_dir.mkdir(parents=True, exist_ok=True)
     image = output_dir.resolve() / f'{label}-Installer.dmg'
     with tempfile.TemporaryDirectory(prefix='ht76-dmg-') as temporary:
@@ -110,6 +122,8 @@ def package(archive_dir, output_dir, arch, revision):
             if info.get('CFBundleIdentifier') != BUNDLE_ID or info.get('CFBundleShortVersionString') != version:
                 raise ValueError(f'Unexpected bundle identity/version: {bundle}')
             run('/usr/bin/codesign', '--verify', '--all-architectures', '--deep', '--strict', bundle)
+            if fmt == 'AAX' and pace_signed:
+                verify_pace(bundle, wraptool)
             payload = work / f'payload-{fmt}'
             payload.mkdir()
             run('/usr/bin/ditto', bundle, payload / bundle.name)
@@ -140,12 +154,22 @@ def package(archive_dir, output_dir, arch, revision):
         uninstaller = disk / 'Uninstall HT-76.command'
         shutil.copy2(PROJECT / 'scripts/macos/uninstall.command', uninstaller)
         uninstaller.chmod(0o755)
+        aax_status = ('AAX has a verified PACE signature; Pro Tools loading has not been tested.'
+                      if pace_signed else 'AAX has no Avid/PACE signature and requires Pro Tools Developer for testing.')
+        signing_status = ('AU/VST3 are ad-hoc signed. AAX has a verified PACE signature.\n'
+                          'AAX signing: ' + archive_metadata['AAX'].get('signing', 'PACE signed') + '.\n'
+                          'The installer and DMG are unsigned and not notarized; macOS may block opening.\n'
+                          'This packaging step does not add Apple Developer ID signing or notarization.'
+                          if pace_signed else
+                          'Plugin bundles are ad-hoc signed. The installer and DMG are unsigned and\n'
+                          'not notarized; macOS may block opening this development distribution.\n'
+                          'No Apple Developer ID or Avid/PACE signing is included.')
         note = f'''HT-76 {version} — macOS {arch} (macOS 12 or later)
 
 INSTALL
 Close your DAW and open Install HT-76.pkg. Administrator access is required.
 AU, VST3 and AAX are selected by default. Deselect any formats you do not need.
-AAX has no Avid/PACE signature and requires Pro Tools Developer for testing.
+{aax_status}
 This package replaces HT-76 at the selected system-wide plugin locations:
 ''' + '\n'.join(f'{fmt}: {folder}/HT-76.{ext}' for fmt, (ext, folder) in FORMATS.items()) + '''
 
@@ -163,9 +187,7 @@ Presets, sessions, backups, other users' files and other plugins are preserved.
 Keep this DMG or download it again when you need to uninstall.
 
 BUILD STATUS
-Plugin bundles are ad-hoc signed. The installer and DMG are unsigned and
-not notarized; macOS may block opening this development distribution.
-No Apple Developer ID or Avid/PACE signing is included.
+''' + signing_status + '''
 
 LICENSE
 HT-76 original work: Apache-2.0. See LICENSE and NOTICE.
@@ -175,12 +197,14 @@ Third-party components retain their own terms; see third_party/.
         (disk / 'build-info.json').write_text(json.dumps(dict(
             product='HT-76', version=version, revision=revision, platform='macos',
             architecture=arch, formats=list(FORMATS), installer_signed=False,
-            macos_notarized=False, pace_signed=False), indent=2) + '\n')
+            macos_notarized=False, pace_signed=pace_signed,
+            aax_signing=archive_metadata['AAX'].get('signing', 'unsigned'),
+            pro_tools_host_tested=False), indent=2) + '\n')
         resources = work / 'resources'
         resources.mkdir()
         shutil.copy2(disk / 'README.txt', resources / 'README.txt')
         definition = work / 'Distribution.xml'
-        definition.write_bytes(distribution(version, arch))
+        definition.write_bytes(distribution(version, arch, pace_signed=pace_signed))
         run('/usr/bin/productbuild', '--distribution', definition, '--package-path', packages,
             '--resources', resources, disk / 'Install HT-76.pkg')
         # Parse with Installer without installing anything on the build machine.
@@ -199,5 +223,6 @@ if __name__ == '__main__':
     parser.add_argument('--archive-dir', type=Path, default=Path('dist'))
     parser.add_argument('--output-dir', type=Path, default=Path('dist'))
     parser.add_argument('--arch', choices=['arm64', 'x86_64', 'universal'], required=True)
+    parser.add_argument('--wraptool', help='PACE tool for verifying signed AAX (or set PACE_WRAPTOOL)')
     args = parser.parse_args()
-    package(args.archive_dir, args.output_dir, args.arch, os.environ.get('GITHUB_SHA', 'local'))
+    package(args.archive_dir, args.output_dir, args.arch, os.environ.get('GITHUB_SHA', 'local'), args.wraptool)

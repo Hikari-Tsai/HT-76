@@ -19,6 +19,19 @@ spec.loader.exec_module(dmg)
 
 
 class DmgTests(unittest.TestCase):
+    def test_signed_aax_choice_describes_verified_signature_without_host_guarantee(self):
+        xml = ET.fromstring(dmg.distribution('0.9.3', 'universal', pace_signed=True))
+        choice = xml.find("choice[@id='AAX']")
+        self.assertEqual(choice.get('start_selected'), 'true')
+        self.assertIn('PACE signed', choice.get('title'))
+        self.assertNotIn('Developer only', choice.get('title'))
+        self.assertIn('not been tested', choice.get('description'))
+        self.assertNotIn('No Avid/PACE signing', choice.get('description'))
+
+    def test_unsigned_aax_choice_retains_developer_restriction(self):
+        xml = ET.fromstring(dmg.distribution('0.9.3', 'universal'))
+        self.assertIn('Developer only', xml.find("choice[@id='AAX']").get('title'))
+
     def test_choices_architecture_locations_and_all_formats_selected(self):
         for arch in ('arm64', 'x86_64', 'universal'):
             xml = ET.fromstring(dmg.distribution('1.0.0', arch))

@@ -11,12 +11,12 @@
 
 ## 下載與安裝
 
-[![AAX](https://img.shields.io/badge/AAX-662D91?style=for-the-badge&logo=protools&logoColor=FFFFFF)](#plugin-downloads)[![AU](https://img.shields.io/badge/AU-D1D1D6?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMUQxRDFGIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBkPSJNMyAxMHY0bTQtN3YxMG01LTE0djE4bTUtMTR2MTBtNC03djQiLz48L3N2Zz4%3D)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-AU.zip)[![VST3](https://img.shields.io/badge/VST3-C90526?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ijk3MCAwIDQyMCA1MDAiPjxwYXRoIGZpbGw9IiNGRkZGRkYiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTEyMjAuMSw3LjFsODAuMiw4MC4yYy04Mi4yLDUuNi0xNDcuMSw3NC4xLTE0Ny4xLDE1Ny43YzAsODcuMSw3MC4zLDE1Ny43LDE1Ny4zLDE1OC4xbC05MC4zLDkwLjNMOTc3LDI1MC4zIEwxMjIwLjEsNy4xTDEyMjAuMSw3LjF6IE0xMjQ0LjEsMjQ1LjFjMC0zNy4xLDMwLjEtNjcuMiw2Ny4yLTY3LjJjMzcuMSwwLDY3LjIsMzAuMSw2Ny4yLDY3LjJjMCwzNy4xLTMwLjEsNjcuMi02Ny4yLDY3LjIgQzEyNzQuMSwzMTIuMiwxMjQ0LjEsMjgyLjIsMTI0NC4xLDI0NS4xTDEyNDQuMSwyNDUuMXoiLz48L3N2Zz4%3D&logoColor=FFFFFF)](#plugin-downloads)[![DMG](https://img.shields.io/badge/DMG-000000?style=for-the-badge&logo=apple&logoColor=FFFFFF)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-Installer.dmg)[![EXE](https://img.shields.io/badge/EXE-0078D4?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTIgMmg5djlIMnptMTEgMGg5djloLTl6TTIgMTNoOXY5SDJ6bTExIDBoOXY5aC05eiIvPjwvc3ZnPg%3D%3D&logoColor=FFFFFF)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-windows-x64-Setup.exe)
+[![AAX](https://img.shields.io/badge/AAX-662D91?style=for-the-badge&logo=protools&logoColor=FFFFFF)](#plugin-downloads)[![AU](https://img.shields.io/badge/AU-D1D1D6?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMUQxRDFGIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBkPSJNMyAxMHY0bTQtN3YxMG01LTE0djE4bTUtMTR2MTBtNC03djQiLz48L3N2Zz4%3D)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-AU.zip)[![VST3](https://img.shields.io/badge/VST3-C90526?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ijk3MCAwIDQyMCA1MDAiPjxwYXRoIGZpbGw9IiNGRkZGRkYiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTEyMjAuMSw3LjFsODAuMiw4MC4yYy04Mi4yLDUuNi0xNDcuMSw3NC4xLTE0Ny4xLDE1Ny43YzAsODcuMSw3MC4zLDE1Ny43LDE1Ny4zLDE1OC4xbC05MC4zLDkwLjNMOTc3LDI1MC4zIEwxMjIwLjEsNy4xTDEyMjAuMSw3LjF6IE0xMjQ0LjEsMjQ1LjFjMC0zNy4xLDMwLjEtNjcuMiw2Ny4yLTY3LjJjMzcuMSwwLDY3LjIsMzAuMSw2Ny4yLDY3LjJjMCwzNy4xLTMwLjEsNjcuMi02Ny4yLDY3LjIgQzEyNzQuMSwzMTIuMiwxMjQ0LjEsMjgyLjIsMTI0NC4xLDI0NS4xTDEyNDQuMSwyNDUuMXoiLz48L3N2Zz4%3D&logoColor=FFFFFF)](#plugin-downloads)[![DMG](https://img.shields.io/badge/DMG-000000?style=for-the-badge&logo=apple&logoColor=FFFFFF)](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-Installer.dmg)
 
-AAX／VST3 請在下表選擇平台；AU、DMG、EXE 按鈕直接下載 **v0.93**。
+下表提供各平台下載；AU、DMG 按鈕直接下載 **v0.93**。Windows 未簽署的 AAX ZIP 與 EXE 安裝包已下架，目前僅提供 VST3 ZIP。
 
 1. **下載：** 在 Releases 展開 **Assets**，依平台選擇下表的安裝檔。標示 Pre-release 的版本為測試版；Source code 是原始碼。
-2. **安裝：** 關閉 DAW，執行安裝程式並選擇格式。所有格式預設勾選，可取消不需要的項目。
+2. **安裝：** 關閉 DAW。macOS 執行 DMG 內的安裝程式，格式預設全選；Windows 依下表手動安裝 VST3。
 3. **載入：** 重新開啟 DAW 並掃描外掛，在音訊效果器中搜尋 **HT-76**（廠商 **Field Effect**）。Logic Pro 選 AU，支援 VST3 的 DAW 選 VST3。
 
 <a id="plugin-downloads"></a>
@@ -24,13 +24,15 @@ AAX／VST3 請在下表選擇平台；AU、DMG、EXE 按鈕直接下載 **v0.93*
 | 平台 | 下載與安裝 | 格式 |
 | --- | --- | --- |
 | macOS 12+ · Intel／Apple Silicon 通用 | 開啟 `*-macos-universal-Installer.dmg` → 執行 `Install HT-76.pkg` | [AU](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-AU.zip)、[VST3](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-VST3.zip)、[AAX](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-macos-universal-AAX.zip) |
-| Windows x64 | 執行 `*-windows-x64-Setup.exe`，內含 Visual C++ 執行環境 | [VST3](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-windows-x64-VST3.zip)、[AAX](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-windows-x64-AAX.zip) |
+| Windows x64 | 解壓 ZIP，將完整 `HT-76.vst3` 複製到 `C:\Program Files\Common Files\VST3` | [VST3](https://github.com/Hikari-Tsai/HT-76/releases/download/v0.93/HT-76-0.9.3-8fc2d5056ea9-windows-x64-VST3.zip) |
 
-**目前為未正式簽署的測試版。** 系統若阻擋安裝，請參考[安裝問題排查](docs/INSTALLATION.md#安裝問題排查)。AAX 未經 Avid／PACE 簽署，僅供 Pro Tools Developer 測試，正式版 Pro Tools 無法載入；一般使用者可取消 AAX。
+**目前為未完成正式發行簽署的測試版。** v0.93 更新後的 macOS AAX ZIP／DMG 已包含通過驗證的 PACE 簽章，使用本機自簽測試憑證；尚未公證或實測 Pro Tools 載入。Windows 未簽署的 AAX ZIP 與 EXE 安裝包已下架。系統若阻擋安裝，請參考[安裝問題排查](docs/INSTALLATION.md#安裝問題排查)，各附件狀態以 [Release 說明](https://github.com/Hikari-Tsai/HT-76/releases/tag/v0.93)為準。
 
-**解除安裝：** macOS 執行 DMG 內的 `Uninstall HT-76.command`，依提示輸入 `UNINSTALL`；Windows 至「設定 → 應用程式」解除安裝 **HT-76 Plugins**。操作前請先關閉 DAW。
+**解除安裝：** macOS 執行 DMG 內的 `Uninstall HT-76.command`，依提示輸入 `UNINSTALL`；Windows 手動安裝版移除 `HT-76.vst3`；先前透過 EXE 安裝者，至「設定 → 應用程式」解除安裝 **HT-76 Plugins**。操作前請先關閉 DAW。
 
 ZIP 手動安裝、外掛路徑及 DAW 掃描步驟請見[完整安裝指南](docs/INSTALLATION.md)。
+
+**開發者操作說明：** [本機 AAX 簽署與 Release 上傳](docs/LOCAL_AAX_SIGNING.md)（macOS 腳本、首次設定、環境變數與備份說明）。
 
 ## 介面預覽
 
@@ -201,6 +203,8 @@ git push origin v0.93
 產品版本來自 `CMakeLists.txt`，**tag 不會自動修改外掛版本**；發佈前請同步更新 CMake 與 Projucer 的版本。ZIP／DMG／EXE 檔名包含產品版本、commit、平台、架構與格式。Actions 外掛 artifacts 保存 30 天、logs 保存 14 天；Release 附件不受此期限影響。
 
 工作流程使用 GitHub 自動提供的 token，只有發佈工作取得 `contents: write`，不需額外 PAT。提交時請包含 `.github/`、原始碼、測試、腳本、`design/assets/`、`docs/images/` 與隨附的 DSP 原始碼；JUCE 由 CI 取得，不必提交。
+
+macOS AAX 可在本機以 `./scripts/sign-release-aax.sh --tag v0.93 --upload` 完成下載、PACE 簽署、驗證與重新上傳；不加 `--upload` 只產出本機 ZIP。首次設定與憑證範圍見 [本機 AAX 簽署](docs/LOCAL_AAX_SIGNING.md)。設定與日誌不會提交至 Git，Windows 與安裝包另行處理。
 
 本機可使用相同打包程式：
 

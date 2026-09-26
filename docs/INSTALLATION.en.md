@@ -23,19 +23,19 @@ macOS 12 or later is required. A standalone application can also be built from s
 | Installation method | Asset filename ending |
 | --- | --- |
 | macOS installer (recommended) | `-macos-universal-Installer.dmg` |
-| Windows x64 installer (recommended) | `-windows-x64-Setup.exe` |
+| Windows x64 manual installation | `-windows-x64-VST3.zip` (AAX/EXE removed) |
 | Manual installation of one format | `-AU.zip`, `-VST3.zip`, or `-AAX.zip` for your platform |
 
 GitHub's **Source code (zip / tar.gz)** downloads contain source files, not ready-to-use plug-ins. Checksums are verified internally in CI, without separate checksum downloads on the Release page. If downloading from **Actions → Build plugins → Artifacts**, extract GitHub's outer ZIP first, then use the installer or format ZIP inside it.
 
 **Choosing a format:** Use **AU** in Logic Pro, or **VST3** in a DAW that supports it. HT-76 is an audio effect loaded in your DAW's effects slot; `.vst3` and `.component` files cannot be launched by double-clicking like regular applications. Releases do not include the standalone application.
 
-**AAX status:** Builds contain AAX Native, with no HDX AAX DSP implementation or Avid/PACE signature. They are intended for Pro Tools Developer testing; retail Pro Tools requires valid AAX signing. macOS plug-ins are ad-hoc signed and not notarized; Windows builds are not Authenticode signed. See [Avid's AAX developer information](https://developer.avid.com/aax/).
+**AAX status:** Builds contain AAX Native, with no HDX AAX DSP implementation. The updated v0.93 macOS AAX ZIP/DMG contains a verified PACE signature using a local self-signed test certificate; Pro Tools loading has not been tested. The unsigned Windows AAX ZIP and the EXE containing it have been removed from v0.93. macOS AU/VST3 are ad-hoc signed; PKG/DMG files lack Developer ID signing and notarization. Windows builds are not Authenticode signed. See the [release notes](https://github.com/Hikari-Tsai/HT-76/releases/tag/v0.93) for each asset's status.
 
 ### macOS DMG installation and uninstallation
 
 1. Download `HT-76-<version>-<commit>-macos-universal-Installer.dmg` for Intel or Apple Silicon. Close your DAW, then open the DMG.
-2. Double-click `Install HT-76.pkg` in the mounted disk window. Follow the prompts and choose the formats you need. AU/VST3/AAX are all selected by default. Most users can deselect AAX, which is currently only for Pro Tools Developer testing.
+2. Double-click `Install HT-76.pkg` in the mounted disk window. Follow the prompts and choose the formats you need. AU/VST3/AAX are all selected by default; deselect any you do not need. AAX has a PACE signature, but Pro Tools loading has not been tested.
 3. Enter your administrator password when prompted. If macOS blocks the installer, see [troubleshooting](#troubleshooting).
 4. Eject the DMG after installation, reopen your DAW, and follow the [scanning and loading instructions](#scanning-and-loading-in-your-daw) to find **HT-76**. Keep the downloaded DMG for uninstallation.
 
@@ -59,9 +59,15 @@ Keep the DMG or download it again to access the uninstaller. The source tool is 
 bash scripts/macos/uninstall.command --dry-run
 ```
 
-The plug-ins currently use ad-hoc signatures. The PKG/DMG lacks Developer ID signing and Apple notarization, so macOS may block it. DMG packaging does not add Apple or Avid/PACE signing to these development builds.
+AU/VST3 use ad-hoc signatures; AAX has a PACE signature and uses a local self-signed test certificate. The PKG/DMG lacks Developer ID signing and Apple notarization, so macOS may block it. DMG packaging preserves the existing AAX signature; it does not add Apple distribution signing or notarization.
 
-### Windows installation and uninstallation
+### Windows v0.93 manual installation
+
+The unsigned Windows AAX ZIP and setup EXE have been removed from v0.93. Extract `-windows-x64-VST3.zip`, copy the complete `HT-76.vst3` bundle to `C:\Program Files\Common Files\VST3`, then reopen your DAW and scan. To uninstall, close your DAW and remove that bundle. The ZIP does not include the Visual C++ runtime.
+
+### Previous Windows EXE installation and uninstallation
+
+The following instructions are for users who previously downloaded or installed the EXE; v0.93 no longer provides it.
 
 1. Download `HT-76-<version>-<commit>-windows-x64-Setup.exe`, save your project, and close your DAW.
 2. Double-click the EXE and allow administrator access when prompted. For SmartScreen messages, see [troubleshooting](#troubleshooting).
@@ -85,7 +91,7 @@ The HT-76 Windows EXE and plug-ins are not Authenticode signed. AAX is also not 
 
 ### Manual ZIP installation
 
-If you have used the DMG/EXE installer, you do not need to copy the ZIP contents as well. Manual installation is for users who prefer to manage plug-in locations themselves. On Windows, the EXE is recommended because it also handles the Visual C++ runtime.
+If you have used the DMG/EXE installer, you do not need to copy the ZIP contents as well. Manual installation is for users who prefer to manage plug-in locations themselves. Windows v0.93 now uses the VST3 ZIP; the Visual C++ runtime must be provided separately.
 
 1. Close your DAW and extract the ZIP for your platform and format. Locate `HT-76.component`, `HT-76.vst3`, or `HT-76.aaxplugin`.
 2. Copy the **entire plug-in bundle/folder** to the appropriate directory. Do not copy only its binary, DLL, or `Contents` folder. Keep the supplied `README.txt`, `build-info.json`, and license files separately if desired.
@@ -109,7 +115,7 @@ Search your DAW's plug-in browser for **HT-76**, under manufacturer **Field Effe
 | Logic Pro | Install AU, then choose **Audio FX → Audio Units → Field Effect → HT-76** on a track. If missing, open **Logic Pro → Settings (Preferences in older versions) → Plug-in Manager**, select HT-76, and click **Reset & Rescan Selection**. If it is completely absent from that list, check its location and restart your Mac. See [Apple's troubleshooting guide](https://support.apple.com/en-gb/122179). |
 | Ableton Live | Under **Settings / Preferences → Plug-Ins**, enable **Use VST3 Plug-In System Folders** (wording varies by version) and click **Rescan** if needed. Search for HT-76 under **Plug-Ins** and drag it onto an audio track. For AU on macOS, enable the corresponding Audio Units option. See the [Windows guide](https://help.ableton.com/hc/en-us/articles/209071729-Using-VST-plug-ins-on-Windows) or [macOS guide](https://help.ableton.com/hc/en-us/articles/209068929-Using-AU-and-VST-plug-ins-on-macOS). |
 | Other DAWs with VST3 support | Enable VST3 in the plug-in manager, check the VST3 locations above, rescan, and search for HT-76 in the audio effects list. Menu names depend on your DAW version. |
-| Pro Tools | Uses AAX, but **retail Pro Tools cannot load these builds without Avid/PACE signing**. Current artifacts are only for Pro Tools Developer testing. Reinstalling or rescanning does not remove that restriction. |
+| Pro Tools | The macOS AAX ZIP/DMG contains a verified PACE signature, but host loading has not been tested. Windows AAX remains unsigned by PACE and is for Developer testing only; reinstalling or rescanning cannot replace signing. |
 
 These are scanning/loading instructions, not a claim of verified compatibility with every listed DAW. For a first listen, leave the default Rev D selected, play your track, adjust Input while watching GR, then use Output to match the level when comparing with bypass.
 
@@ -117,7 +123,7 @@ These are scanning/loading instructions, not a claim of verified compatibility w
 
 | Symptom | What to check |
 | --- | --- |
-| macOS reports an unidentified developer or missing notarization | Plug-ins are ad-hoc signed; PKG/DMG files are unsigned and not notarized. After confirming that the file comes from this project's Release and is trustworthy, try opening it, then go to **System Settings → Privacy & Security → Open Anyway** and follow the prompts for that file. This option is not available for every type of block. If macOS reports damage or malware, stop and verify the source. See [Apple's guidance](https://support.apple.com/en-gb/102445). |
+| macOS reports an unidentified developer or missing notarization | AU/VST3 are ad-hoc signed; AAX uses a local test certificate. PKG/DMG files are unsigned and not notarized. After confirming that the file comes from this project's Release and is trustworthy, try opening it, then go to **System Settings → Privacy & Security → Open Anyway** and follow the prompts for that file. This option is not available for every type of block. If macOS reports damage or malware, stop and verify the source. See [Apple's guidance](https://support.apple.com/en-gb/102445). |
 | Windows reports an unknown publisher or “Windows protected your PC” | The installer is not Authenticode signed. If you trust the source and your system offers the option, choose **More info → Run anyway**. Organization policies or Smart App Control may prevent proceeding. See [Microsoft's SmartScreen documentation](https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation). |
 | Your DAW cannot find HT-76 | Confirm you downloaded an installer rather than Source code, selected a supported format, and placed the complete bundle in the correct directory. Restart and rescan. Logic Pro requires AU; installing only VST3 will not make it appear there. |
 | Duplicate entries or an older version appear | Close your DAW and check both system and user directories for HT-76 or the old `1176 Field Effect` name. Uninstall old copies as described above, then reinstall and rescan. Do not remove the entire shared plug-in directory. |
