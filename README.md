@@ -38,7 +38,7 @@ ZIP 手動安裝、外掛路徑及 DAW 掃描步驟請見[完整安裝指南](do
 
 ### Classic Rack
 
-Rev D 使用炭黑髮絲紋，切換 Rev H 時改為中性銀色髮絲紋與深色面板文字。大型 Input／Output 旋鈕、指針 VU 表與長方形 Ratio／Meter 按鈕維持相同佈局。下方雙聲道 IN／OUT PPM 區域也隨版本切換銀色／黑色底板，文字與刻度同步調整對比；LED 音量條保留深色凹槽。旋鈕焦點沿旋鈕外緣顯示。
+Rev D 使用炭黑髮絲紋，切換 Rev H 時改為中性銀色髮絲紋與深色面板文字。大型 Input／Output 旋鈕、指針 VU 表與長方形 Ratio／Meter 按鈕維持相同佈局。下方雙聲道 IN／OUT PPM 區域也隨版本切換銀色／黑色底板，文字與刻度同步調整對比；LED 音量條保留深色凹槽。兩種面板的旋鈕皆維持黑色，焦點沿旋鈕外緣顯示。
 
 **Rev D · 黑色面板**
 
@@ -46,11 +46,11 @@ Rev D 使用炭黑髮絲紋，切換 Rev H 時改為中性銀色髮絲紋與深�
 
 **Rev H · 銀色面板與 PPM 區域**
 
-![Rev H 銀色 Rack 原生 JUCE 介面](docs/images/rack-revh-silver-badda5a1.png)
+![Rev H 銀色 Rack 原生 JUCE 介面](docs/images/rack-revh-silver-02a2a13d.png)
 
 ### Dynamic View
 
-以約 12 秒的 Input、Output 與 Gain Reduction 曲線呈現動態變化，右側顯示雙聲道音量與壓縮量，下方集中放置控制項。金屬面板同樣跟隨版本切換，圖表與計量區維持深色背景。
+以約 12 秒的 Input、Output 與 Gain Reduction 曲線呈現動態變化，右側顯示雙聲道音量與壓縮量，下方集中放置控制項。金屬面板與右側 PPM 區域跟隨版本切換黑色／銀色，文字與刻度同步調整對比。曲線圖與電平條凹槽維持深色，旋鈕皆維持黑色。
 
 **Rev D · 黑色面板**
 
@@ -58,7 +58,7 @@ Rev D 使用炭黑髮絲紋，切換 Rev H 時改為中性銀色髮絲紋與深�
 
 **Rev H · 銀色面板**
 
-![Rev H 銀色 Dynamic 原生 JUCE 介面](docs/images/dynamic-revh-silver-e3e71d60.png)
+![Rev H 銀色 Dynamic 原生 JUCE 介面](docs/images/dynamic-revh-silver-8e9bd988.png)
 
 以上為原生 JUCE Editor 截圖，由離線測試音訊驅動實際 DSP 產生。
 
@@ -192,13 +192,13 @@ git clone --branch 8.0.12 --depth 1 https://github.com/juce-framework/JUCE.git t
 新建 Release 的說明會自動附上 macOS Gatekeeper／簽署與公證狀態、Windows SmartScreen／未知發行者提示，以及未簽署 AAX 無法在正式版 Pro Tools 載入的限制，並提供各平台的官方說明連結。
 
 ```sh
-git tag -a v0.93 -m "HT-76 v0.93 pre-release"
-git push origin v0.93
+git tag -a v0.99 -m "HT-76 v0.99"
+git push origin v0.99
 ```
 
-`v0.93` 對應外掛版本 `0.9.3`，此次發行標示為 **Pre-release**，不設為 Latest。所有平台建置、測試與打包成功後才會公開發行。
+`v0.99` 對應外掛版本 `0.9.9`，以正式 Release 發行。所有平台建置、測試與打包成功後才會公開發行。
 
-發佈工作在 CI 內驗證五份 ZIP、一份 Universal DMG、一份 Windows EXE 與各自的 SHA-256，Release 只上傳這七份安裝下載檔，先建立草稿，全部上傳完成才公開。重新執行會沿用同名 Release 並更新同名附件；immutable releases 啟用後無法覆寫已公開附件。一般分支、PR、手動執行和非 `v` 開頭 tag 只產生 Actions artifacts。
+發佈工作在 CI 內驗證五份 ZIP、一份 Universal DMG、一份 Windows EXE 與各自的 SHA-256，Release 上傳這七份下載檔，包含未經 PACE 簽署的 AAX 與安裝包；後續簽署與替換由維護者手動處理。先建立草稿，全部上傳完成才公開，不另提供雜湊檔案。重新執行會沿用同名 Release 並更新同名附件；immutable releases 啟用後無法覆寫已公開附件。一般分支、PR、手動執行和非 `v` 開頭 tag 只產生 Actions artifacts。
 
 產品版本來自 `CMakeLists.txt`，**tag 不會自動修改外掛版本**；發佈前請同步更新 CMake 與 Projucer 的版本。ZIP／DMG／EXE 檔名包含產品版本、commit、平台、架構與格式。Actions 外掛 artifacts 保存 30 天、logs 保存 14 天；Release 附件不受此期限影響。
 

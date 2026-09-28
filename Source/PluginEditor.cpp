@@ -201,6 +201,8 @@ public:
         }
         g.setColour (juce::Colours::black.withAlpha (0.5f));
         g.fillEllipse (bounds.translated (1.0f, 3.0f).expanded (1.0f));
+        // Keep the black knob opaque on either faceplate after drawing its shadow.
+        g.setOpacity (1.0f);
         g.drawImage (image, bounds, juce::RectanglePlacement::stretchToFit);
         const float angle = (-135.0f + 270.0f * (float) valueToProportionOfLength (getValue())) * pi / 180.0f;
         const auto direction = juce::Point<float> (std::sin (angle), -std::cos (angle));
@@ -737,8 +739,11 @@ private:
         g.setGradientFill (juce::ColourGradient (juce::Colour (0xff0b1013), chart.getTopLeft(),
                                                 juce::Colour (0xff112024), chart.getBottomRight(), false));
         g.fillRect (chart);
-        g.setGradientFill (juce::ColourGradient (juce::Colour (0xff111719), meters.getTopLeft(),
-                                                juce::Colour (0xff0c1114), meters.getBottomRight(), false));
+        if (silverPanel)
+            g.setColour (juce::Colours::black.withAlpha (0.035f));
+        else
+            g.setGradientFill (juce::ColourGradient (juce::Colour (0xff111719), meters.getTopLeft(),
+                                                    juce::Colour (0xff0c1114), meters.getBottomRight(), false));
         g.fillRect (meters);
         g.setColour (juce::Colours::black.withAlpha (silverPanel ? 0.035f : 0.38f));
         g.fillRect (deck);
@@ -878,9 +883,9 @@ private:
     {
         g.setColour (juce::Colour (0xff343e3d).withAlpha (0.6f));
         g.drawVerticalLine (1041, 43, 307); g.drawVerticalLine (1139, 43, 307);
-        drawLabel (g, "IN", { 934, 49, 83, 18 }, 12, ink, true, juce::Justification::centred, true);
-        drawLabel (g, "GR", { 1055, 49, 70, 18 }, 12, ink, true, juce::Justification::centred, true);
-        drawLabel (g, "OUT", { 1163, 49, 83, 18 }, 12, ink, true, juce::Justification::centred, true);
+        drawLabel (g, "IN", { 934, 49, 83, 18 }, 12, plateInk(), true, juce::Justification::centred, true);
+        drawLabel (g, "GR", { 1055, 49, 70, 18 }, 12, plateInk(), true, juce::Justification::centred, true);
+        drawLabel (g, "OUT", { 1163, 49, 83, 18 }, 12, plateInk(), true, juce::Justification::centred, true);
         const float top = 87, height = 180;
         auto levelY = [&] (float db) { return top + height * (6.0f - juce::jlimit (-60.0f, 6.0f, db)) / 66.0f; };
         const std::array<float, 2> starts { 956, 1186 };
@@ -891,11 +896,11 @@ private:
             const auto& channels = bank == 0 ? inputMeters : outputMeters;
             for (int db = 6; db >= -60; db -= 6)
                 drawLabel (g, db > 0 ? "+6" : juce::String (db), { x - 31, levelY ((float) db) - 5, 22, 12 },
-                      8.5f, muted, false, juce::Justification::centredRight, true);
+                      8.5f, plateMuted(), false, juce::Justification::centredRight, true);
             for (size_t channel = 0; channel < 2; ++channel)
             {
                 const float bx = x + (float) channel * 42;
-                drawLabel (g, channel == 0 ? "L" : "R", { bx, 67, 25, 14 }, 9, muted, false, juce::Justification::centred, true);
+                drawLabel (g, channel == 0 ? "L" : "R", { bx, 67, 25, 14 }, 9, plateMuted(), false, juce::Justification::centred, true);
                 g.setColour (juce::Colour (0xff050b0d)); g.fillRect (bx, top, 25.0f, height);
                 const auto y = levelY (channels[channel].display);
                 g.setGradientFill (juce::ColourGradient (colour.darker (0.24f), bx, 0, colour, bx + 14, 0, false));
@@ -910,11 +915,14 @@ private:
                     g.setColour (channels[channel].held > 0 ? amber : colour.brighter (0.15f));
                     g.fillRect (bx, levelY (channels[channel].held), 25.0f, 1.5f);
                 }
+                const auto peakColour = channels[channel].held > 6
+                    ? (silverPanel ? juce::Colour (0xff934009) : amber)
+                    : (silverPanel ? plateInk() : colour);
                 drawLabel (g, dbText (channels[channel].held), { bx - 9, 274, 43, 20 }, 11,
-                      channels[channel].held > 6 ? amber : colour, true, juce::Justification::centred, true);
+                      peakColour, true, juce::Justification::centred, true);
             }
-            drawLabel (g, "dBFS", { x - 40, 277, 34, 15 }, 8, muted, false, juce::Justification::centred, true);
-            drawLabel (g, "PEAK", { x, 295, 67, 15 }, 9, muted, false, juce::Justification::centred, true);
+            drawLabel (g, "dBFS", { x - 40, 277, 34, 15 }, 8, plateMuted(), false, juce::Justification::centred, true);
+            drawLabel (g, "PEAK", { x, 295, 67, 15 }, 9, plateMuted(), false, juce::Justification::centred, true);
         }
         constexpr float grX = 1083;
         g.setColour (juce::Colour (0xff050b0d)); g.fillRect (grX, top, 25.0f, height);
@@ -923,15 +931,16 @@ private:
         g.fillRect (grX, top, 25.0f, grHeight);
         for (int i = 0; i <= 4; ++i)
             drawLabel (g, juce::String (-6 * i), { grX - 32, top - 5 + height * (float) i / 4, 24, 12 },
-                  8.5f, muted, false, juce::Justification::centredRight, true);
+                  8.5f, plateMuted(), false, juce::Justification::centredRight, true);
         for (int s = 1; s < 36; ++s)
         {
             g.setColour (dark.withAlpha (0.55f));
             g.drawHorizontalLine ((int) (top + height * (float) s / 36), grX, grX + 25);
         }
-        drawLabel (g, "dB", { 1044, 277, 32, 15 }, 8, muted, false, juce::Justification::centred, true);
-        drawLabel (g, juce::String (-heldReduction, 1), { 1070, 274, 52, 20 }, 11, amber, true, juce::Justification::centred, true);
-        drawLabel (g, "PEAK", { 1070, 295, 52, 15 }, 9, muted, false, juce::Justification::centred, true);
+        drawLabel (g, "dB", { 1044, 277, 32, 15 }, 8, plateMuted(), false, juce::Justification::centred, true);
+        drawLabel (g, juce::String (-heldReduction, 1), { 1070, 274, 52, 20 }, 11,
+              silverPanel ? plateInk() : amber, true, juce::Justification::centred, true);
+        drawLabel (g, "PEAK", { 1070, 295, 52, 15 }, 9, plateMuted(), false, juce::Justification::centred, true);
     }
 
     FieldEffectProcessor& processor;

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(HT-76 VERSION 0.9.3 LANGUAGES C CXX)
+project(HT-76 VERSION 0.9.9 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if(APPLE)
@@ -27,7 +27,7 @@ juce_add_binary_data(FieldEffectAssets HEADER_NAME BinaryData.h NAMESPACE Binary
     design/assets/concept-metal.jpg
     design/assets/concept-vu-paper.jpg)
 juce_add_plugin(FieldEffect
-    COMPANY_NAME "Field Effect"
+    COMPANY_NAME "HMusic"
     BUNDLE_ID "com.hikaritsai.fieldeffect1176"
     PLUGIN_MANUFACTURER_CODE Hika
     PLUGIN_CODE Fe76

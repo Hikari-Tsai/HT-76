@@ -38,7 +38,7 @@ See the [full installation guide](docs/INSTALLATION.en.md) for manual ZIP instal
 
 ### Classic Rack
 
-Rev D uses a charcoal brushed-metal panel. Switching to Rev H changes it to neutral silver with dark labels. The large Input/Output knobs, analog-style VU meter, and rectangular Ratio/Meter buttons retain the same layout. The lower stereo IN/OUT PPM panel also switches between black and silver, with matching label and scale contrast; the LED strips keep their dark recessed backgrounds. Knob focus outlines follow the knob edges.
+Rev D uses a charcoal brushed-metal panel. Switching to Rev H changes it to neutral silver with dark labels. The large Input/Output knobs, analog-style VU meter, and rectangular Ratio/Meter buttons retain the same layout. The lower stereo IN/OUT PPM panel also switches between black and silver, with matching label and scale contrast; the LED strips keep their dark recessed backgrounds. Knobs remain black on both panels, with focus outlines following their edges.
 
 **Rev D · Black panel**
 
@@ -46,11 +46,11 @@ Rev D uses a charcoal brushed-metal panel. Switching to Rev H changes it to neut
 
 **Rev H · Silver panel and PPM section**
 
-![Rev H silver Rack interface](docs/images/rack-revh-silver-badda5a1.png)
+![Rev H silver Rack interface](docs/images/rack-revh-silver-02a2a13d.png)
 
 ### Dynamic View
 
-Approximately 12 seconds of Input, Output, and Gain Reduction history show changes in dynamics. Stereo level and gain reduction meters sit on the right, with controls below. The metal panel follows the selected revision, while the graph and meters keep their dark backgrounds.
+Approximately 12 seconds of Input, Output, and Gain Reduction history show changes in dynamics. Stereo level and gain reduction meters sit on the right, with controls below. The metal panel and right-hand PPM section switch between black and silver with the selected revision, with matching label and scale contrast. The graph and meter lanes keep their dark backgrounds, and the knobs remain black.
 
 **Rev D · Black panel**
 
@@ -58,7 +58,7 @@ Approximately 12 seconds of Input, Output, and Gain Reduction history show chang
 
 **Rev H · Silver panel**
 
-![Rev H silver Dynamic interface](docs/images/dynamic-revh-silver-e3e71d60.png)
+![Rev H silver Dynamic interface](docs/images/dynamic-revh-silver-8e9bd988.png)
 
 These screenshots show the native JUCE Editor with offline test audio running through the actual DSP.
 
@@ -192,13 +192,13 @@ In Projucer, select **Xcode (macOS) → Save and Open in IDE**, then choose the 
 New release notes include macOS Gatekeeper, signing and notarization status, Windows SmartScreen / unknown publisher messages, and the restriction preventing unsigned AAX from loading in retail Pro Tools, with official platform documentation links.
 
 ```sh
-git tag -a v0.93 -m "HT-76 v0.93 pre-release"
-git push origin v0.93
+git tag -a v0.99 -m "HT-76 v0.99"
+git push origin v0.99
 ```
 
-`v0.93` corresponds to plug-in version `0.9.3`. It is marked **Pre-release**, not Latest. It is published only after every platform completes its build, tests, and packaging.
+`v0.99` corresponds to plug-in version `0.9.9` and is a stable Release. It is published only after every platform completes its build, tests, and packaging.
 
-CI verifies the five ZIPs, one DMG, one EXE, and their SHA-256 checksums. Only those seven installation/download files are uploaded to the Release. It starts as a draft and is published after all uploads finish. Reruns reuse the same release and update matching assets; published assets cannot be overwritten when immutable releases are enabled. Regular branches, pull requests, manual runs, and tags without a `v` prefix produce Actions artifacts only.
+CI verifies five ZIPs, one Universal DMG, one Windows EXE, and their SHA-256 checksums, then publishes all seven download files, including AAX and installers without PACE signing. Maintainers handle subsequent signing and replacement manually. The release starts as a draft and is published after all uploads finish; no separate checksum files are provided. Reruns reuse the same release and update matching assets; published assets cannot be overwritten when immutable releases are enabled. Regular branches, pull requests, manual runs, and tags without a `v` prefix produce Actions artifacts only.
 
 The product version comes from `CMakeLists.txt`; **a tag does not change the plug-in version automatically**. Update both CMake and Projucer versions before releasing. ZIP/DMG/EXE filenames include product version, commit, platform, architecture, and format. Actions plug-in artifacts are retained for 30 days and logs for 14 days; Release attachments are not subject to those retention periods.
 

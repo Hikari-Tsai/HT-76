@@ -45,6 +45,27 @@ void click(juce::Component& root,const char* name)
     button.triggerClick();
     waitUntil([&]{return observer.delivered;},"native button click was not delivered");
 }
+void requireOpaqueKnobs(juce::Component& root)
+{
+    for(const auto* name:{"Input gain","Output gain","Attack time, clockwise faster","Release time, clockwise faster"})
+    {
+        auto& knob=slider(root,name);
+        juce::Image black(juce::Image::RGB,knob.getWidth(),knob.getHeight(),true);
+        juce::Image white(juce::Image::RGB,knob.getWidth(),knob.getHeight(),true);
+        for(auto* image:{&black,&white})
+        {
+            juce::Graphics g(*image);
+            g.fillAll(image==&black?juce::Colours::black:juce::Colours::white);
+            knob.paint(g);
+        }
+        // Compare the opaque body, excluding the translucent outer shadow and scale.
+        const int radius=juce::jmin(knob.getWidth(),knob.getHeight())/6;
+        for(int y=knob.getHeight()/2-radius;y<knob.getHeight()/2+radius;++y)
+            for(int x=knob.getWidth()/2-radius;x<knob.getWidth()/2+radius;++x)
+                require(black.getPixelAt(x,y)==white.getPixelAt(x,y),
+                        "knob body colour changes with faceplate background");
+    }
+}
 }
 int runEditorTests()
 {
@@ -60,7 +81,9 @@ int runEditorTests()
         click(*e,"8");click(*e,"ALL");require(p.parameters.getRawParameterValue("allButtons")->load()>.5,"ALL did not activate");click(*e,"ALL");require(p.parameters.getRawParameterValue("ratio")->load()==1,"ALL did not preserve ratio");
         click(*e,"REV H*");require(p.parameters.getRawParameterValue("revision")->load()==1,"Rev H button did not select audio model");
         click(*e,"REV D");require(p.parameters.getRawParameterValue("revision")->load()==0,"Rev D button did not restore model");
+        requireOpaqueKnobs(*e);
         click(*e,"DYNAMIC");require(p.editorMode.load()==1&&std::abs(e->getHeight()-508)<=1,"Dynamic reference size");require(std::abs(gain.getValue()-18)<.01,"view switch lost gain");
+        requireOpaqueKnobs(*e);
         click(*e,"RACK");require(std::abs(e->getHeight()-334)<=1,"Rack switch height");
         FieldEffectProcessor restored;restored.editorMode.store(1);restored.editorWidth.store(1440);juce::MemoryBlock state;restored.getStateInformation(state);p.setStateInformation(state.getData(),(int)state.getSize());
         waitUntil([&]{return e->getWidth()==1440&&std::abs(e->getHeight()-572)<=1;},"open editor did not follow restored view/width");
